@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: climate_db
+    environment:
+      POSTGRES_DB: climate_intel
+      POSTGRES_USER: uhi_admin
+      POSTGRES_PASSWORD: uhi_secure_password_9283
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uhi_admin -d climate_intel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: climate_redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./uhi_backend
+      dockerfile: Dockerfile
+    container_name: climate_backend
+    environment:
+      - SECRET_KEY=django-insecure-prod-env-docker-key-912830
+      - DEBUG=False
+      - DB_ENGINE=django.contrib.gis.db.backends.postgis
+      - DB_NAME=climate_intel
+      - DB_USER=uhi_admin
+      - DB_PASSWORD=uhi_secure_password_9283
+      - DB_HOST=db
+      - DB_PORT=5432
+      - GEMINI_API_KEY=
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - ./uhi_backend:/app
+      - ./AI_UH_Python:/AI_UH_Python
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  celery:
+    build:
+      context: ./uhi_backend
+      dockerfile: Dockerfile
+    container_name: climate_celery
+    command: celery -A uhi_backend worker --loglevel=info
+    environment:
+      - SECRET_KEY=django-insecure-prod-env-docker-key-912830
+      - DEBUG=False
+      - DB_ENGINE=django.contrib.gis.db.backends.postgis
+      - DB_NAME=climate_intel
+      - DB_USER=uhi_admin
+      - DB_PASSWORD=uhi_secure_password_9283
+      - DB_HOST=db
+      - DB_PORT=5432
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    volumes:
+      - ./uhi_backend:/app
+      - ./AI_UH_Python:/AI_UH_Python
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./uhi_frontend
+      dockerfile: Dockerfile
+    container_name: climate_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: climate_nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:

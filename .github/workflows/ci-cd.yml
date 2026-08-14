@@ -1,0 +1,61 @@
+name: Climate Intelligence Platform CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install GDAL system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin libgdal-dev
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install django djangorestframework djangorestframework-simplejwt django-cors-headers django-environ reportlab openpyxl rasterio shapely geopandas shap xgboost scikit-learn
+
+      - name: Run Backend Unit Tests
+        env:
+          SECRET_KEY: ci-test-secret-key-129837192837
+          DB_ENGINE: django.db.backends.sqlite3
+          DEBUG: True
+        run: |
+          cd uhi_backend
+          python manage.py test api
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: uhi_frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd uhi_frontend
+          npm ci
+
+      - name: Next.js Production Build
+        run: |
+          cd uhi_frontend
+          npm run build

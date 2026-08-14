@@ -1,0 +1,10 @@
+station_name,latitude,longitude,clay_thickness,sand_thickness,basalt_thickness,depletion_rate
+Ahmedabad Central CGWB,23.0225,72.5714,4.2,15.6,22.8,1.2
+Ahmedabad North CGWB,23.1500,72.6000,3.5,18.2,19.5,1.1
+Ahmedabad East CGWB,22.9900,72.6800,5.8,12.4,28.5,1.4
+Jodhpur West CGWB,26.2400,72.9000,2.1,6.4,35.8,1.8
+Jodhpur East CGWB,26.2200,73.1500,1.8,8.2,42.0,1.9
+Kurukshetra Station CGWB,29.9695,76.8783,8.5,22.4,12.0,2.1
+Kurukshetra South CGWB,29.8500,76.8000,9.2,20.5,15.2,2.2
+Bathinda Station CGWB,30.2110,74.9455,6.4,28.5,18.0,2.4
+Bathinda North CGWB,30.3500,74.8800,5.9,32.0,16.5,2.3
