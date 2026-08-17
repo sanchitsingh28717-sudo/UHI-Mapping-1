@@ -25,13 +25,18 @@ export default function WindCorridorsPage() {
       <div className="p-6 md:p-8 max-w-4xl mx-auto w-full space-y-6 flex-1">
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-          <div>
-            <h1 className="text-xl font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>
-              Wind Corridor Intelligence (CFD-Net)
-            </h1>
-            <p className="text-xs text-zinc-400 font-medium mt-0.5">
-              2D CFD potential wind flow solvers and passive cooling corridor mapping.
-            </p>
+          <div className="flex items-center gap-3.5">
+            <div className="p-2.5 rounded-xl bg-black/35 border border-[#a7cecd]/40 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.25)]">
+              <Wind size={22} />
+            </div>
+            <div>
+              <h1 className="text-xl font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>
+                Wind Corridor Intelligence (CFD-Net)
+              </h1>
+              <p className="text-xs text-zinc-400 font-medium mt-0.5">
+                2D CFD potential wind flow solvers and passive cooling corridor mapping.
+              </p>
+            </div>
           </div>
         </div>
 

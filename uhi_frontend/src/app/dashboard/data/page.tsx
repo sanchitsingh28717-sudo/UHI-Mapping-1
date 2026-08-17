@@ -125,13 +125,18 @@ export default function DataAndAuditingPage() {
     <div className="p-6 md:p-8 max-w-6xl mx-auto space-y-8 min-h-full">
       {/* Page Header Box - Seamless Blended Glass */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-colors hover:border-white/20">
-        <div>
-          <h1 className="text-xl font-extrabold tracking-tight text-white drop-shadow-sm" style={{ color: '#a7cecd' }}>
-            Data Management &amp; Security Audits
-          </h1>
-          <p className="text-xs text-slate-300 font-medium mt-0.5 drop-shadow-sm">
-            Geospatial dataset ingestion engine, CRS validation, and security event audits.
-          </p>
+        <div className="flex items-center gap-3.5">
+          <div className="p-2.5 rounded-xl bg-black/35 border border-[#a7cecd]/40 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.25)]">
+            <Database size={22} />
+          </div>
+          <div>
+            <h1 className="text-xl font-extrabold tracking-tight text-white drop-shadow-sm" style={{ color: '#a7cecd' }}>
+              Data Management &amp; Security Audits
+            </h1>
+            <p className="text-xs text-slate-300 font-medium mt-0.5 drop-shadow-sm">
+              Geospatial dataset ingestion engine, CRS validation, and security event audits.
+            </p>
+          </div>
         </div>
       </div>
 
