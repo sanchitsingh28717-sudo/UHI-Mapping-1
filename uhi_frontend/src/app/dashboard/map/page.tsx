@@ -113,7 +113,7 @@ export default function MapWorkspace() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] md:h-screen overflow-hidden bg-slate-950 relative">
+    <div className="flex h-[calc(100vh-4rem)] md:h-screen overflow-hidden relative">
       {/* Map Area */}
       <div className="flex-1 relative h-full p-3 min-w-0">
         <MapComponent panelCollapsed={panelCollapsed} />
@@ -122,7 +122,7 @@ export default function MapWorkspace() {
       {/* Collapse/Expand Toggle Button */}
       <button
         onClick={() => setPanelCollapsed(!panelCollapsed)}
-        className="absolute top-1/2 -translate-y-1/2 z-[2000] bg-slate-900 border border-slate-700 text-slate-400 hover:bg-slate-800 transition-all p-2 rounded-l-xl shadow-xl cursor-pointer"
+        className="absolute top-1/2 -translate-y-1/2 z-[2000] bg-black/40 backdrop-blur-md border border-white/15 text-slate-400 hover:bg-white/10 transition-all p-2 rounded-l-xl shadow-xl cursor-pointer"
         style={{ right: panelCollapsed ? 0 : '320px', color: panelCollapsed ? undefined : '#a7cecd' }}
         title={panelCollapsed ? 'Expand Panel' : 'Collapse Panel'}
       >
@@ -131,12 +131,12 @@ export default function MapWorkspace() {
 
       {/* Analysis Sidebar Panel — Dark Theme */}
       <div
-        className={`border-l border-slate-800 bg-slate-950 flex flex-col h-full transition-all duration-300 ease-in-out flex-shrink-0 ${
+        className={`border-l border-white/10 bg-black/35 backdrop-blur-md flex flex-col h-full transition-all duration-300 ease-in-out flex-shrink-0 ${
           panelCollapsed ? 'w-0 overflow-hidden opacity-0' : 'w-80 opacity-100'
         }`}
       >
         {/* Panel Header */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60 flex-shrink-0">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between flex-shrink-0">
           <h2 className="text-xs font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>
             Decision Support Panel
           </h2>
@@ -146,7 +146,7 @@ export default function MapWorkspace() {
                 <button
                   onClick={() => setShowExportModal(true)}
                   disabled={downloading}
-                  className="p-1.5 text-slate-500 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-400 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
                   style={{ color: downloading ? '#a7cecd' : undefined }}
                   title="Export Executive PDF Report"
                 >
@@ -154,7 +154,7 @@ export default function MapWorkspace() {
                 </button>
                 <button
                   onClick={handleReset}
-                  className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
                   title="Inspect New Coordinate"
                 >
                   <RefreshCw size={14} />
@@ -166,14 +166,14 @@ export default function MapWorkspace() {
 
         <div className="p-4 flex-1 space-y-4 overflow-y-auto">
           {/* Region Selection Card */}
-          <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="bg-black/25 p-3.5 rounded-xl border border-white/10 space-y-2">
             <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
               Active Regional Scope
             </label>
             <select
               value={activeCity}
               onChange={(e) => setActiveCity(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 text-[11px] font-semibold p-2 rounded-lg text-slate-200 focus:outline-none cursor-pointer"
+              className="w-full bg-black/40 border text-[11px] font-semibold p-2 rounded-lg text-slate-200 focus:outline-none cursor-pointer"
               style={{ borderColor: 'rgba(167, 206, 205, 0.3)' }}
             >
               <option value="Ahmedabad">Ahmedabad (AMC Limits)</option>
@@ -240,7 +240,7 @@ export default function MapWorkspace() {
                   </div>
                 </div>
               ) : (
-                <div className="h-40 flex flex-col items-center justify-center text-center p-5 bg-slate-900/60 border border-dashed border-slate-700 rounded-xl">
+                <div className="h-40 flex flex-col items-center justify-center text-center p-5 bg-black/20 border border-dashed border-white/20 rounded-xl">
                   <MapPin size={28} className="text-slate-600 mb-2 animate-bounce" />
                   <h3 className="text-xs font-bold text-slate-400">No Coordinates Inspected</h3>
                   <p className="text-[10px] text-slate-600 mt-1 max-w-[180px] leading-relaxed">
@@ -253,7 +253,7 @@ export default function MapWorkspace() {
           ) : (
             <div className="space-y-4">
               {/* Selected Coordinates */}
-              <div className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div className="bg-black/25 p-3.5 rounded-xl border border-white/10 flex items-center justify-between">
                 <div>
                   <h4 className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Inspected Coordinates</h4>
                   <p className="text-[11px] font-mono font-bold mt-0.5" style={{ color: '#a7cecd' }}>
@@ -301,7 +301,7 @@ export default function MapWorkspace() {
               )}
 
               {loading && (
-                <div className="p-5 text-center space-y-2 flex flex-col items-center justify-center bg-slate-900 rounded-xl border border-slate-800">
+                <div className="p-5 text-center space-y-2 flex flex-col items-center justify-center bg-black/25 rounded-xl border border-white/10">
                   <div className="w-7 h-7 border-[3px] border-t-transparent rounded-full animate-spin" style={{ borderColor: '#a7cecd', borderTopColor: 'transparent' }} />
                   <p className="text-[10px] font-bold text-slate-500">Extracting spatial indices and running ML booster...</p>
                 </div>
@@ -326,7 +326,7 @@ export default function MapWorkspace() {
               {analysisResult && (
                 <div className="space-y-4">
                   {/* Heat Classification Output */}
-                  <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900">
+                  <div className="p-3.5 rounded-xl border border-white/10 bg-black/25">
                     <div className="flex justify-between items-start">
                       <div>
                         <h4 className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Model Prediction</h4>
@@ -372,28 +372,28 @@ export default function MapWorkspace() {
                   <div>
                     <h3 className="text-[9px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Environmental Variables</h3>
                     <div className="grid grid-cols-2 gap-1.5 text-[10px]">
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Temp (LST)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Temp (LST)</span>
                         <span className="font-extrabold text-amber-300">{analysisResult.environmental_indicators.lst.toFixed(1)} °C</span>
                       </div>
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Vegetation (NDVI)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Vegetation (NDVI)</span>
                         <span className="font-extrabold" style={{ color: '#a7cecd' }}>{analysisResult.environmental_indicators.ndvi.toFixed(3)}</span>
                       </div>
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Built-Up (NDBI)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Built-Up (NDBI)</span>
                         <span className="font-extrabold text-amber-400">{analysisResult.environmental_indicators.ndbi.toFixed(3)}</span>
                       </div>
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Water (NDWI)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Water (NDWI)</span>
                         <span className="font-extrabold text-sky-400">{analysisResult.environmental_indicators.ndwi.toFixed(3)}</span>
                       </div>
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Elevation (DEM)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Elevation (DEM)</span>
                         <span className="font-extrabold text-slate-300">{analysisResult.environmental_indicators.dem} m</span>
                       </div>
-                      <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800 col-span-2">
-                        <span className="text-[8px] font-bold text-slate-600 block uppercase">Land Use (LULC)</span>
+                      <div className="bg-black/25 p-2.5 rounded-lg border border-white/10 col-span-2">
+                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Land Use (LULC)</span>
                         <span className="font-extrabold text-slate-300">{getLulcName(analysisResult.environmental_indicators.lulc)}</span>
                       </div>
                     </div>
@@ -407,7 +407,7 @@ export default function MapWorkspace() {
                         <HelpCircle size={12} className="text-slate-600 cursor-help" />
                       </span>
                     </div>
-                    <div className="h-40 w-full bg-slate-900 p-2 rounded-lg border border-slate-800">
+                    <div className="h-40 w-full bg-black/25 p-2 rounded-lg border border-white/10">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                            data={shapData}
@@ -437,7 +437,7 @@ export default function MapWorkspace() {
 
                   {/* Wind / Groundwater recharge summaries */}
                   <div className="space-y-2">
-                    <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between">
+                    <div className="p-3 bg-black/25 border border-white/10 rounded-xl flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Wind style={{ color: '#a7cecd' }} size={14} />
                         <div>
@@ -450,7 +450,7 @@ export default function MapWorkspace() {
                       </span>
                     </div>
 
-                    <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between">
+                    <div className="p-3 bg-black/25 border border-white/10 rounded-xl flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Droplets className="text-sky-400" size={14} />
                         <div>
@@ -472,10 +472,10 @@ export default function MapWorkspace() {
 
       {/* PDF Export Customization Modal */}
       {showExportModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 w-full max-w-md overflow-hidden">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+          <div className="bg-black/70 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/15 w-full max-w-md overflow-hidden">
             {/* Modal Header */}
-            <div className="bg-slate-800/60 p-4 border-b border-slate-800 flex items-center gap-3">
+            <div className="bg-white/5 p-4 border-b border-white/10 flex items-center gap-3">
               <div className="p-2 rounded-xl border" style={{ backgroundColor: 'rgba(167, 206, 205, 0.1)', borderColor: 'rgba(167, 206, 205, 0.2)' }}>
                 <Download size={18} style={{ color: '#a7cecd' }} />
               </div>
@@ -487,7 +487,7 @@ export default function MapWorkspace() {
 
             {/* Modal Body / Checklist */}
             <div className="p-5 space-y-3">
-              <label className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/60 border border-slate-700/50 cursor-not-allowed opacity-70">
+              <label className="flex items-start gap-3 p-3 rounded-xl bg-white/5 border border-white/10 cursor-not-allowed opacity-70">
                 <input type="checkbox" checked={true} disabled={true} className="mt-0.5 w-4 h-4 rounded" style={{ accentColor: '#a7cecd' }} />
                 <div>
                   <span className="text-xs font-bold text-slate-200 block">Baseline UHI Heat Index Analysis</span>
@@ -495,7 +495,7 @@ export default function MapWorkspace() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-800/40 cursor-pointer transition-all">
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/10 hover:bg-white/5 cursor-pointer transition-all">
                 <input type="checkbox" checked={includeWind} onChange={(e) => setIncludeWind(e.target.checked)} className="mt-0.5 w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#a7cecd' }} />
                 <div>
                   <span className="text-xs font-bold text-slate-200 block">Wind Corridor (CFD) Analysis</span>
@@ -503,7 +503,7 @@ export default function MapWorkspace() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-800/40 cursor-pointer transition-all">
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/10 hover:bg-white/5 cursor-pointer transition-all">
                 <input type="checkbox" checked={includeGroundwater} onChange={(e) => setIncludeGroundwater(e.target.checked)} className="mt-0.5 w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#a7cecd' }} />
                 <div>
                   <span className="text-xs font-bold text-slate-200 block">Groundwater Recharge Suitability</span>
@@ -511,7 +511,7 @@ export default function MapWorkspace() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-800/40 cursor-pointer transition-all">
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/10 hover:bg-white/5 cursor-pointer transition-all">
                 <input type="checkbox" checked={includeAquifer} onChange={(e) => setIncludeAquifer(e.target.checked)} className="mt-0.5 w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#a7cecd' }} />
                 <div>
                   <span className="text-xs font-bold text-slate-200 block">Subterranean Aquifer Oracle Blueprint</span>
@@ -519,7 +519,7 @@ export default function MapWorkspace() {
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 p-3 rounded-xl border border-slate-700 hover:bg-slate-800/40 cursor-pointer transition-all">
+              <label className="flex items-start gap-3 p-3 rounded-xl border border-white/10 hover:bg-white/5 cursor-pointer transition-all">
                 <input type="checkbox" checked={includeSocioThermal} onChange={(e) => setIncludeSocioThermal(e.target.checked)} className="mt-0.5 w-4 h-4 rounded cursor-pointer" style={{ accentColor: '#a7cecd' }} />
                 <div>
                   <span className="text-xs font-bold text-slate-200 block">Socio-Thermal & Slum-UHI Vulnerability Matrix</span>
@@ -529,7 +529,7 @@ export default function MapWorkspace() {
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-slate-800/40 p-4 border-t border-slate-800 flex justify-end gap-2.5">
+            <div className="bg-white/5 p-4 border-t border-white/10 flex justify-end gap-2.5">
               <button
                 onClick={() => {
                   setShowExportModal(false);
@@ -539,7 +539,7 @@ export default function MapWorkspace() {
                   setIncludeSocioThermal(true);
                 }}
                 disabled={downloading}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-xs rounded-xl transition-all cursor-pointer"
+                className="px-4 py-2 bg-white/10 hover:bg-white/15 border border-white/15 text-slate-300 font-bold text-xs rounded-xl transition-all cursor-pointer"
               >
                 Cancel
               </button>

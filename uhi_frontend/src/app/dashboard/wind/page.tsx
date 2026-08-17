@@ -21,12 +21,12 @@ export default function WindCorridorsPage() {
   };
 
   return (
-    <div className="min-h-full w-full bg-black text-slate-100 flex flex-col">
+    <div className="min-h-full w-full flex flex-col text-slate-100">
       <div className="p-6 md:p-8 max-w-4xl mx-auto w-full space-y-6 flex-1">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-zinc-950 border border-zinc-900 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
           <div className="flex items-center gap-3.5">
-            <div className="p-2.5 rounded-xl bg-zinc-900 border border-[#a7cecd]/30 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.15)]">
+            <div className="p-2.5 rounded-xl bg-black/35 border border-[#a7cecd]/40 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.25)]">
               <Wind size={22} />
             </div>
             <div>
@@ -41,7 +41,7 @@ export default function WindCorridorsPage() {
         </div>
 
         {!selectedCoords || !analysisResult ? (
-          <div className="bg-zinc-950 border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-2xl">
+          <div className="bg-black/25 backdrop-blur-sm border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
             <AlertCircle className="text-amber-400 flex-shrink-0 mt-0.5" size={22} />
             <div>
               <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider">Coordinate Analysis Required</h3>
@@ -62,7 +62,7 @@ export default function WindCorridorsPage() {
           <div className="space-y-6">
             {/* CFD indicators */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl border border-zinc-900 bg-zinc-950 flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Ventilation Efficiency</span>
                   <span className="text-3xl font-black text-white mt-1 block tracking-tight">
@@ -74,7 +74,7 @@ export default function WindCorridorsPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-zinc-900 bg-zinc-950 flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Calculated Wind Velocity</span>
                   <span className="text-3xl font-black text-white mt-1 block tracking-tight">
@@ -86,7 +86,7 @@ export default function WindCorridorsPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-zinc-900 bg-zinc-950 flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Obstruction Category</span>
                   <span className={`text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider w-fit mt-2 block border ${
@@ -105,7 +105,7 @@ export default function WindCorridorsPage() {
 
             {/* 2D Wind Vector Field Grid (CFD Simulation) */}
             <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                   <Compass size={16} className="text-[#a7cecd] animate-spin" />
                   2D Wind Field Flow Grid (10m Resolution)
@@ -113,7 +113,7 @@ export default function WindCorridorsPage() {
                 <span className="text-[9px] font-mono text-zinc-500 font-bold uppercase">Grid Size: 100m² Buffer</span>
               </div>
 
-              <div className="grid grid-cols-10 gap-1.5 p-4 bg-black rounded-xl border border-zinc-900 aspect-square md:aspect-auto max-w-lg mx-auto shadow-inner">
+              <div className="grid grid-cols-10 gap-1.5 p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 aspect-square md:aspect-auto max-w-lg mx-auto shadow-inner">
                 {analysisResult.wind_corridor.wind_vector_grid?.map((vec: any, idx: number) => {
                   // Calculate opacity based on wind speed (faster = brighter)
                   const opacity = Math.min(Math.max(vec.speed / 4.5, 0.25), 1.0);
@@ -121,7 +121,7 @@ export default function WindCorridorsPage() {
                   return (
                     <div 
                       key={idx} 
-                      className="aspect-square flex items-center justify-center relative group cursor-pointer hover:bg-zinc-900 rounded transition-colors"
+                      className="aspect-square flex items-center justify-center relative group cursor-pointer hover:bg-white/5 rounded transition-colors"
                       onClick={() => handleCoordinateClick(vec.latitude, vec.longitude)}
                       title={`Coords: (${vec.latitude.toFixed(4)}, ${vec.longitude.toFixed(4)})\nSpeed: ${vec.speed} m/s\nAngle: ${vec.angle}°\nClick to view on Map Workspace`}
                     >
@@ -134,7 +134,7 @@ export default function WindCorridorsPage() {
                         }} 
                       />
                       {/* Tiny speed numeric overlays on hover */}
-                      <span className="absolute hidden group-hover:block z-50 bg-black text-zinc-200 font-mono text-[8px] p-1 rounded -top-8 border border-zinc-800 pointer-events-none whitespace-nowrap shadow-md">
+                      <span className="absolute hidden group-hover:block z-50 bg-black/80 backdrop-blur-sm text-zinc-200 font-mono text-[8px] p-1 rounded -top-8 border border-white/15 pointer-events-none whitespace-nowrap shadow-md">
                         {vec.speed} m/s
                       </span>
                     </div>
@@ -147,12 +147,12 @@ export default function WindCorridorsPage() {
             </div>
 
             {/* Building Height Recommendations */}
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950 space-y-4 shadow-xl">
+            <div className="p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm space-y-4 shadow-xl">
               <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <Landmark size={16} className="text-[#a7cecd]" />
                 Zoning & Height Regulations
               </h3>
-              <div className="p-4 bg-black rounded-xl border border-zinc-900 text-xs font-medium text-zinc-300 leading-relaxed">
+              <div className="p-4 bg-black/40 rounded-xl border border-white/10 text-xs font-medium text-zinc-200 leading-relaxed">
                 "{analysisResult.wind_corridor.building_height_recommendation}"
               </div>
             </div>
