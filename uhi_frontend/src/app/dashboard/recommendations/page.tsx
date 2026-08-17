@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Sparkles, MapPin, AlertCircle, ArrowRight, Printer, Compass, ShieldCheck, Cpu } from 'lucide-react';
+import { Sparkles, MapPin, AlertCircle, ArrowRight, Printer, ShieldCheck } from 'lucide-react';
 
 export default function RecommendationsPage() {
   const { selectedCoords, analysisResult, recommendations, fetchRecommendations, loading } = useStore();
@@ -66,16 +66,17 @@ export default function RecommendationsPage() {
       className="min-h-full w-full bg-cover bg-center bg-no-repeat bg-fixed relative flex flex-col"
       style={{
         backgroundImage: "url('/milkyway-bg.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
       }}
     >
-      {/* Ambient backdrop gradient overlays for cosmic depth and legibility */}
-      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/90 pointer-events-none" />
+      {/* Light transparent tint without any blur filter to ensure the cosmic stars stay razor-sharp and clear */}
+      <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
       {/* Content Container */}
       <div className="relative z-10 p-6 md:p-8 max-w-4xl mx-auto w-full space-y-6 flex-1">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/70 backdrop-blur-md border border-slate-800/80 shadow-2xl">
           <div className="flex items-center gap-3.5">
             <div className="p-2.5 rounded-xl bg-slate-800/80 border border-[#a7cecd]/30 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.2)]">
               <Sparkles size={22} />
@@ -84,7 +85,7 @@ export default function RecommendationsPage() {
               <h1 className="text-xl font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>
                 AI Mitigation Recommendations
               </h1>
-              <p className="text-xs text-slate-400 font-medium mt-0.5">
+              <p className="text-xs text-slate-300 font-medium mt-0.5">
                 Generative AI planning recommendations and urban cooling strategies.
               </p>
             </div>
@@ -92,7 +93,7 @@ export default function RecommendationsPage() {
         </div>
 
         {!selectedCoords ? (
-          <div className="bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-2xl">
+          <div className="bg-slate-900/80 backdrop-blur-md border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-2xl">
             <AlertCircle className="text-amber-400 flex-shrink-0 mt-0.5" size={22} />
             <div>
               <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider">Inspection Coordinate Required</h3>
@@ -112,7 +113,7 @@ export default function RecommendationsPage() {
         ) : (
           <div className="space-y-6">
             {/* Coordinates Header */}
-            <div className="bg-slate-900/75 backdrop-blur-xl border border-slate-800/80 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+            <div className="bg-slate-900/75 backdrop-blur-md border border-slate-800/80 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-slate-800/90 text-[#a7cecd] border border-[#a7cecd]/20 rounded-lg shadow-inner">
                   <MapPin size={18} />
@@ -141,11 +142,11 @@ export default function RecommendationsPage() {
             </div>
 
             {generating && (
-              <div className="bg-slate-900/80 backdrop-blur-xl p-8 rounded-2xl border border-slate-800 text-center space-y-4 shadow-2xl">
+              <div className="bg-slate-900/80 backdrop-blur-md p-8 rounded-2xl border border-slate-800 text-center space-y-4 shadow-2xl">
                 <div className="w-10 h-10 border-4 border-[#a7cecd] border-t-transparent rounded-full animate-spin mx-auto shadow-[0_0_15px_rgba(167,206,205,0.4)]" />
                 <div>
                   <h3 className="text-xs font-bold text-slate-200">Interrogating Climate Knowledgebase</h3>
-                  <p className="text-[11px] text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
+                  <p className="text-[11px] text-slate-300 mt-1 max-w-sm mx-auto leading-relaxed">
                     Analyzing vegetation indices, built-up density, and surface temperatures to build customized micro-climate guidelines.
                   </p>
                 </div>
@@ -154,7 +155,7 @@ export default function RecommendationsPage() {
 
             {/* Recommendations Render */}
             {recommendations && (
-              <div className="bg-slate-900/85 backdrop-blur-2xl p-8 rounded-2xl border border-slate-800/90 shadow-2xl relative text-slate-100">
+              <div className="bg-slate-900/85 backdrop-blur-md p-8 rounded-2xl border border-slate-800/90 shadow-2xl relative text-slate-100">
                 {/* Document Header */}
                 <div className="flex justify-between items-start border-b border-slate-800/80 pb-5 mb-6">
                   <div>
