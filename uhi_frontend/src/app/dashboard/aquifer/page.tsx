@@ -304,7 +304,7 @@ export default function AquiferOracle() {
   const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="p-6 space-y-6 text-slate-800">
+    <div className="p-6 md:p-8 space-y-6 min-h-full text-slate-100">
       {/* Header Banner — icon removed from title */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
         <div>

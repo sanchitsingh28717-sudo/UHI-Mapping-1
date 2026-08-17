@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!mounted || !token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-300 font-medium">
+      <div className="min-h-screen flex items-center justify-center bg-black text-slate-300 font-medium">
         Verifying authorization...
       </div>
     );
@@ -73,21 +73,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-slate-950 font-sans text-slate-100">
+    /* Full-screen cosmic container with the shared Milky Way background */
+    <div
+      className="h-screen flex overflow-hidden font-sans text-slate-100 bg-cover bg-center bg-no-repeat bg-fixed relative"
+      style={{ backgroundImage: "url('/milkyway-bg.png')" }}
+    >
+      {/* Global subtle dark tint — lets stars shine through without blinding */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none z-0" />
+
       {/* ── Sidebar ── */}
-      <div className="hidden md:flex md:flex-shrink-0">
+      <div className="hidden md:flex md:flex-shrink-0 relative z-10">
         <div
-          className={`flex flex-col bg-slate-950 border-r border-slate-800/80 relative overflow-hidden
-            transition-[width] duration-300 ease-in-out ${sidebarCollapsed ? 'w-16' : 'w-56'}`}
+          className={`flex flex-col relative overflow-hidden
+            transition-[width] duration-300 ease-in-out ${sidebarCollapsed ? 'w-16' : 'w-56'}
+            bg-black/30 backdrop-blur-md border-r border-white/10`}
         >
           {/* Logo header */}
-          <div className="flex items-center justify-between px-3.5 h-14 border-b border-slate-800 bg-slate-900/40 flex-shrink-0">
+          <div className="flex items-center justify-between px-3.5 h-14 border-b border-white/10 flex-shrink-0">
             <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
-              {/* No icon — just wordmark text */}
               {!sidebarCollapsed && (
                 <div className="flex flex-col whitespace-nowrap">
                   <span className="text-xs font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>ClimateIntel</span>
-                  <span className="text-[9px] text-slate-500 font-bold tracking-wider uppercase">Ahmedabad Twin</span>
+                  <span className="text-[9px] text-slate-400 font-bold tracking-wider uppercase">Ahmedabad Twin</span>
                 </div>
               )}
             </div>
@@ -95,7 +102,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* Collapse/Expand Toggle */}
             <button
               onClick={toggleSidebar}
-              className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer flex-shrink-0"
+              className="p-1 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer flex-shrink-0"
               title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
             >
               {sidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
@@ -104,9 +111,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Navigation Links */}
           <div className="flex-1 flex flex-col pt-3 pb-4 overflow-y-auto">
-            {/* Sliding indicator track */}
             <div ref={navRef} className="flex-1 px-2 space-y-1 relative">
-              {/* Animated active pill — slides behind links */}
+              {/* Animated active pill */}
               {indicatorHeight > 0 && (
                 <div
                   className="absolute left-2 right-2 rounded-xl pointer-events-none z-0"
@@ -132,14 +138,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       sidebarCollapsed ? 'justify-center px-0' : 'px-3 gap-3'
                     } ${
                       active
-                        ? 'text-slate-950 font-extrabold hover:bg-slate-950 hover:text-[#a7cecd] hover:border hover:border-[#a7cecd]/50'
-                        : 'text-slate-400 hover:bg-[#a7cecd] hover:text-slate-950'
+                        ? 'text-slate-950 font-extrabold hover:bg-black/30 hover:text-[#a7cecd] hover:border hover:border-[#a7cecd]/50'
+                        : 'text-slate-300 hover:bg-[#a7cecd] hover:text-slate-950'
                     }`}
                   >
                     <Icon
                       size={18}
                       className={`flex-shrink-0 transition-colors duration-200 ease-in-out ${
-                        active ? 'text-slate-950 group-hover:text-[#a7cecd]' : 'text-slate-500 group-hover:text-slate-950'
+                        active ? 'text-slate-950 group-hover:text-[#a7cecd]' : 'text-slate-400 group-hover:text-slate-950'
                       }`}
                     />
                     {!sidebarCollapsed && (
@@ -152,9 +158,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           {/* Profile footer */}
-          <div className="flex-shrink-0 flex border-t border-slate-800/80 p-2.5 bg-slate-900/40">
+          <div className="flex-shrink-0 flex border-t border-white/10 p-2.5">
             <div className={`flex items-center w-full ${sidebarCollapsed ? 'justify-center flex-col gap-2' : 'gap-2.5'}`}>
-              <div className="p-1.5 rounded-lg bg-slate-800 text-slate-300 flex-shrink-0">
+              <div className="p-1.5 rounded-lg bg-white/10 text-slate-300 flex-shrink-0 border border-white/10">
                 <UserIcon size={16} />
               </div>
               {!sidebarCollapsed && (
@@ -170,7 +176,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               )}
               <button
                 onClick={handleLogout}
-                className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
                 title="Logout"
               >
                 <LogOut size={15} />
@@ -181,9 +187,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       {/* ── Main Content ── */}
-      <div className="flex flex-col w-0 flex-1 overflow-hidden">
+      <div className="flex flex-col w-0 flex-1 overflow-hidden relative z-10">
         {/* Mobile header */}
-        <div className="md:hidden flex items-center justify-between bg-slate-950 border-b border-slate-800 px-4 h-14">
+        <div className="md:hidden flex items-center justify-between bg-black/30 backdrop-blur-md border-b border-white/10 px-4 h-14">
           <span className="text-sm font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>ClimateIntel</span>
           <div className="flex items-center gap-4">
             <span
@@ -198,8 +204,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
 
-        {/* Page content */}
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-slate-950">
+        {/* Page content — transparent so bg shows through */}
+        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
           {children}
         </main>
       </div>

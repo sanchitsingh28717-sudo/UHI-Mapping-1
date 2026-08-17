@@ -27,7 +27,7 @@ export default function GroundwaterPage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
+    <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-6 min-h-full">
       <div>
         <h1 className="text-xl font-extrabold tracking-tight" style={{ color: '#a7cecd' }}>
           Groundwater Recharge Planning (Geo-GAN)
