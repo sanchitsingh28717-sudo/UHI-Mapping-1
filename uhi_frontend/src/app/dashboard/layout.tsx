@@ -24,10 +24,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (mounted) {
-      if (!token) router.push('/login');
+      if (!token) router.push('/');
       else if (!user) fetchProfile();
     }
   }, [mounted, token, user, fetchProfile, router]);
+
 
   // Update sliding indicator position whenever active route changes
   useEffect(() => {
