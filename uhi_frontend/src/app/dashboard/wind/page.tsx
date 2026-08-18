@@ -24,9 +24,9 @@ export default function WindCorridorsPage() {
     <div className="min-h-full w-full flex flex-col text-slate-100">
       <div className="p-6 md:p-8 max-w-4xl mx-auto w-full space-y-6 flex-1">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-black/25 backdrop-blur-sm border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl cosmic-card border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
           <div className="flex items-center gap-3.5">
-            <div className="p-2.5 rounded-xl bg-black/35 border border-[#a7cecd]/40 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.25)]">
+            <div className="p-2.5 rounded-xl bg-black/35 border border-[#a7cecd]/40 text-[#a7cecd] shadow-[0_0_15px_rgba(167,206,205,0.25)] glow-active">
               <Wind size={22} />
             </div>
             <div>
@@ -41,8 +41,8 @@ export default function WindCorridorsPage() {
         </div>
 
         {!selectedCoords || !analysisResult ? (
-          <div className="bg-black/25 backdrop-blur-sm border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-            <AlertCircle className="text-amber-400 flex-shrink-0 mt-0.5" size={22} />
+          <div className="cosmic-card border border-amber-500/30 p-6 rounded-2xl flex items-start gap-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+            <AlertCircle className="text-amber-400 flex-shrink-0 mt-0.5 animate-pulse" size={22} />
             <div>
               <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider">Coordinate Analysis Required</h3>
               <p className="text-[11px] text-zinc-300 mt-1.5 leading-relaxed">
@@ -50,7 +50,7 @@ export default function WindCorridorsPage() {
               </p>
               <Link 
                 href="/dashboard/map" 
-                className="mt-3.5 inline-flex items-center gap-1.5 px-4 py-2 text-slate-950 font-extrabold text-[11px] rounded-xl shadow-lg transition-all duration-200 ease-in-out hover:bg-zinc-900 hover:text-[#a7cecd] border border-transparent hover:border-[#a7cecd] cursor-pointer"
+                className="mt-3.5 inline-flex items-center gap-1.5 px-4 py-2 text-slate-950 font-extrabold text-[11px] rounded-xl shadow-lg transition-all duration-200 ease-in-out hover:bg-zinc-900 hover:text-[#a7cecd] border border-transparent hover:border-[#a7cecd] cursor-pointer animate-shimmer"
                 style={{ backgroundColor: '#a7cecd' }}
               >
                 Go to Map Workspace

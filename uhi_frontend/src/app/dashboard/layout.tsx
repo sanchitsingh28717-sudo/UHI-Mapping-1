@@ -73,13 +73,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    /* Full-screen cosmic container with the shared Milky Way background */
-    <div
-      className="h-screen flex overflow-hidden font-sans text-slate-100 bg-cover bg-center bg-no-repeat bg-fixed relative"
-      style={{ backgroundImage: "url('/milkyway-bg.png')" }}
-    >
-      {/* Global subtle dark tint — lets stars shine through without blinding */}
+    /* Full-screen cosmic container with animated slow panoramic background drift */
+    <div className="h-screen flex overflow-hidden font-sans text-slate-100 bg-cosmic-animated relative">
+      {/* Global subtle dark tint */}
       <div className="absolute inset-0 bg-black/20 pointer-events-none z-0" />
+
+      {/* Floating Ambient Nebulae Glow Orbs */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-teal-500/10 blur-[100px] pointer-events-none animate-nebula z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none animate-nebula z-0" style={{ animationDelay: '-8s' }} />
 
       {/* ── Sidebar ── */}
       <div className="hidden md:flex md:flex-shrink-0 relative z-10">
