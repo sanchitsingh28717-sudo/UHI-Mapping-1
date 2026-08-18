@@ -88,11 +88,15 @@ export default function MapWorkspace() {
 
   const getShapData = () => {
     if (!analysisResult?.explainability?.shap_summary) return [];
-    return Object.entries(analysisResult.explainability.shap_summary).map(([name, value]) => ({
-      name,
-      value: parseFloat(value.toFixed(4)),
-    }));
+    return Object.entries(analysisResult.explainability.shap_summary).map(([name, value]) => {
+      // Guard: value may be array (multiclass SHAP) or a scalar
+      const scalar = Array.isArray(value)
+        ? (value as number[]).reduce((acc: number, v: number) => acc + Math.abs(v), 0) / (value as number[]).length
+        : Number(value);
+      return { name, value: parseFloat(scalar.toFixed(4)) };
+    });
   };
+
 
   const shapData = getShapData();
 

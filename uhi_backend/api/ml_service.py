@@ -102,11 +102,23 @@ def predict_heat_zone(features):
     explainer = load_explainer(model)
     shap_vals = explainer.shap_values(input_df)
     
-    # If binary classification, shap_values might be 2D array [samples, features]
-    # Extract feature contributions
-    shap_list = shap_vals[0].tolist()
+    # For multiclass RandomForest, shap_values returns shape [n_classes, n_samples, n_features]
+    # or a list of arrays. Flatten to a single importance scalar per feature using mean abs value.
     feature_names = ['NDVI', 'NDBI', 'NDWI', 'DEM', 'LULC', 'Urban_Severity_Index']
-    shap_dict = dict(zip(feature_names, shap_list))
+    try:
+        sv = np.array(shap_vals)
+        if sv.ndim == 3:
+            # shape: (n_classes, n_samples, n_features) → mean absolute across classes
+            importance = float_list = np.abs(sv[:, 0, :]).mean(axis=0).tolist()
+        elif sv.ndim == 2:
+            # shape: (n_samples, n_features) → single sample
+            importance = sv[0].tolist()
+        else:
+            importance = sv.tolist()
+        shap_dict = dict(zip(feature_names, [float(v) for v in importance]))
+    except Exception:
+        shap_dict = {name: 0.0 for name in feature_names}
+
     
     # Calculate Heat Risk Index
     # Formula: Heat Risk Index = Temperature + Population Density + Built-Up Density - Vegetation Cover
