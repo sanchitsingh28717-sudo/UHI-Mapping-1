@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANKALP // MIL-SPEC GIS TACTICAL RASTER ENGINE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --panel-mil: rgba(15, 23, 42, 0.92);
+            --border-mil: rgba(0, 240, 255, 0.3);
+            --accent-cyan: #00f0ff;
+        }
+
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: #f1f5f9; /* Light background */
+            color: #f8fafc; 
+            overflow: hidden; 
+        }
+        
+        #map { 
+            width: 100vw; height: 100vh; 
+            position: absolute; top: 0; left: 0; 
+            z-index: 1; 
+            /* Removed dark filters to preserve real map visibility */
+        }
+        
+        .leaflet-container { 
+            background: #e2e8f0; 
+            cursor: crosshair !important; 
+        }
+        
+        /* Professional Light-Map Blending for KDE */
+        .leaflet-heatmap-layer { 
+            opacity: 0.70 !important; /* Perfect opacity to see streets underneath */
+            mix-blend-mode: multiply !important; /* Multiply darkens the light map realistically */
+            pointer-events: none;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .mil-panel {
+            background: var(--panel-mil);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-mil);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        /* Upgraded Ward Labels for Light Map Contrast */
+        .mil-ward-label {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(0, 240, 255, 0.6);
+            color: #38bdf8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.05em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 800;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .mil-hotspot-marker {
+            background: rgba(153, 27, 27, 0.95);
+            border: 1px solid #fca5a5;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(153, 27, 27, 0.6);
+            pointer-events: none;
+        }
+
+        /* Wind Vector Arrows */
+        .wind-vector-icon {
+            display: flex; justify-content: center; items-center;
+            color: #0ea5e9;
+            opacity: 0.8;
+            pointer-events: none;
+            filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.8));
+        }
+
+        .telemetry-row {
+            display: flex; justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 5px 0;
+        }
+
+        .qgis-scale-bar {
+            height: 12px; width: 100%;
+            background: linear-gradient(to right, #0000ff, #00ffff, #00ff00, #ffff00, #ff8000, #ff0000, #800000);
+            border-radius: 3px; margin: 8px 0;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .mil-checkbox { accent-color: var(--accent-cyan); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- HUD Control Panel -->
+    <div class="absolute top-6 left-6 z-[1000] mil-panel p-5 w-[380px]">
+        <div class="flex items-center justify-between border-b border-cyan-500/40 pb-3 mb-4">
+            <div class="flex items-center gap-2.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
+                <h1 class="font-mono text-xs font-bold text-cyan-400 tracking-[0.2em] uppercase">SANKALP // GIS INTELLIGENCE</h1>
+            </div>
+            <span class="font-mono text-[9px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/50">EPSG:4326</span>
+        </div>
+
+        <div class="space-y-4 font-mono text-[10px] text-slate-200">
+            <div class="bg-slate-900/80 p-3 rounded-md border border-slate-700/50 space-y-2">
+                <div class="text-cyan-400 font-bold uppercase tracking-wider mb-1 border-b border-slate-700 pb-1">AI Model Telemetry</div>
+                <div class="telemetry-row"><span>UHI THERMAL AGENT</span><span class="text-emerald-400 font-bold">ACTIVE (KDE RASTER)</span></div>
+                <div class="telemetry-row"><span>AERODYNAMIC MODEL</span><span class="text-emerald-400 font-bold">SYNCED (WIND VECTORS)</span></div>
+                <div class="telemetry-row"><span>RESOLUTION</span><span class="text-white font-bold">10m / Pixel Base</span></div>
+            </div>
+            <div>
+                <div class="text-slate-400 uppercase tracking-wider mb-1.5">Operational Directive:</div>
+                <div class="text-xs text-slate-100 bg-slate-800/80 border border-slate-600 p-3 rounded font-sans leading-relaxed shadow-inner">
+                    Real-time fusion of the <b>UHI Thermal Mapping Agent</b> and the <b>Aerodynamic Wind Flow Model</b>. Click any AMC/GMC ward or red anomaly core to deploy the Tri-Domain optimization agent to that coordinate.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layer Tree -->
+    <div class="absolute top-6 right-6 z-[1000] mil-panel p-4 w-[280px] font-mono text-xs">
+        <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest border-b border-slate-700 pb-2 mb-3">Model Layer Control</div>
+        <div class="space-y-3 text-slate-200 text-[11px]">
+            <label class="flex items-center gap-3 cursor-pointer hover:text-cyan-300 transition-colors">
+                <input type="checkbox" id="layerKDE" class="mil-checkbox w-4 h-4" checked onchange="toggleGISLayer('kde')">
+                <span>UHI Agent (Thermal Raster)</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer hover:text-cyan-300 transition-colors">
+                <input type="checkbox" id="layerWind" class="mil-checkbox w-4 h-4" checked onchange="toggleGISLayer('wind')">
+                <span>Wind Model (Vector Field)</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer hover:text-cyan-300 transition-colors">
+                <input type="checkbox" id="layerWards" class="mil-checkbox w-4 h-4" checked onchange="toggleGISLayer('wards')">
+                <span>AMC / GMC Vector Wards</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer hover:text-cyan-300 transition-colors">
+                <input type="checkbox" id="layerHotspots" class="mil-checkbox w-4 h-4" checked onchange="toggleGISLayer('hotspots')">
+                <span>Critical Trap Geofences</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="absolute bottom-6 left-6 z-[1000] mil-panel p-4 w-[340px] font-mono">
+        <div class="flex justify-between items-center text-[10px] font-bold text-slate-200 uppercase tracking-wider">
+            <span>UHI Agent: Surface Temp</span>
+            <span class="text-cyan-400">°C Ramp</span>
+        </div>
+        <div class="qgis-scale-bar"></div>
+        <div class="flex justify-between text-[9px] text-slate-400 font-bold">
+            <span>20°C</span>
+            <span>35°C (Ambient)</span>
+            <span>50°C+ (Anomaly)</span>
+        </div>
+    </div>
+
+    <!-- Coordinates -->
+    <div class="absolute bottom-6 right-6 z-[1000] mil-panel px-4 py-2.5 font-mono text-[11px] text-cyan-400 flex items-center gap-3">
+        <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+        <span id="geodeticReadout">LAT: 23.0225° N | LNG: 72.5714° E</span>
+    </div>
+
+    <script>
+        // -------------------------------------------------------------------------
+        // 1. MAP INITIALIZATION (CartoDB Voyager - Professional Light Street Map)
+        // -------------------------------------------------------------------------
+        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([23.08, 72.58], 11);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // Highly visible, realistic street base map perfectly suited for Multiply blending
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19, subdomains: 'abcd'
+        }).addTo(map);
+
+        // -------------------------------------------------------------------------
+        // 2. VECTOR WARD POLYGON MATRIX (AMC & GMC)
+        // -------------------------------------------------------------------------
+        const tacticalWards = [
+            // AMC Core
+            { name: "Gota", lat: 23.1000, lng: 72.5300, risk: "MODERATE" }, { name: "Chandlodia", lat: 23.0800, lng: 72.5400, risk: "LOW" },
+            { name: "Ghatlodia", lat: 23.0600, lng: 72.5300, risk: "MODERATE" }, { name: "Thaltej", lat: 23.0500, lng: 72.5000, risk: "HIGH" },
+            { name: "Bodakdev", lat: 23.0300, lng: 72.5100, risk: "CRITICAL" }, { name: "Vastrapur", lat: 23.0350, lng: 72.5250, risk: "HIGH" },
+            { name: "Sabarmati", lat: 23.0900, lng: 72.5800, risk: "MODERATE" }, { name: "Chandkheda", lat: 23.1100, lng: 72.5800, risk: "LOW" },
+            { name: "Motera", lat: 23.1050, lng: 72.5950, risk: "MODERATE" }, { name: "Ranip", lat: 23.0700, lng: 72.5700, risk: "MODERATE" },
+            { name: "Naranpura", lat: 23.0500, lng: 72.5500, risk: "LOW" }, { name: "Navrangpura", lat: 23.0300, lng: 72.5500, risk: "HIGH" },
+            { name: "Paldi", lat: 23.0100, lng: 72.5600, risk: "MODERATE" }, { name: "Vasna", lat: 23.0000, lng: 72.5400, risk: "LOW" },
+            { name: "Jodhpur", lat: 23.0100, lng: 72.5100, risk: "MODERATE" }, { name: "Vejalpur", lat: 23.0000, lng: 72.5200, risk: "MODERATE" },
+            { name: "Sarkhej", lat: 22.9800, lng: 72.5000, risk: "HIGH" }, { name: "Bopal", lat: 23.0250, lng: 72.4600, risk: "LOW" },
+            { name: "Shahibaug", lat: 23.0500, lng: 72.6000, risk: "MODERATE" }, { name: "Asarwa", lat: 23.0500, lng: 72.6100, risk: "HIGH" },
+            { name: "Dariapur", lat: 23.0350, lng: 72.5900, risk: "HIGH" }, { name: "Jamalpur", lat: 23.0150, lng: 72.5800, risk: "CRITICAL" },
+            { name: "Khadia", lat: 23.0250, lng: 72.5900, risk: "HIGH" }, { name: "Bapunagar", lat: 23.0400, lng: 72.6250, risk: "HIGH" },
+            { name: "Nikol", lat: 23.0400, lng: 72.6600, risk: "MODERATE" }, { name: "Odhav", lat: 23.0250, lng: 72.6500, risk: "CRITICAL" },
+            { name: "Vastral", lat: 23.0000, lng: 72.6600, risk: "HIGH" }, { name: "Maninagar", lat: 22.9900, lng: 72.6000, risk: "HIGH" },
+            { name: "Danilimda", lat: 22.9850, lng: 72.5800, risk: "CRITICAL" }, { name: "Vatva", lat: 22.9500, lng: 72.6050, risk: "CRITICAL" },
+            { name: "Naroda", lat: 23.0700, lng: 72.6500, risk: "HIGH" },
+            // GMC Grid
+            { name: "Sargasan", lat: 23.1850, lng: 72.6050, risk: "MODERATE" }, { name: "Kudasan", lat: 23.1850, lng: 72.6300, risk: "MODERATE" },
+            { name: "Raysan", lat: 23.1650, lng: 72.6350, risk: "LOW" }, { name: "Koba", lat: 23.1400, lng: 72.6200, risk: "LOW" },
+            { name: "Bhat", lat: 23.1200, lng: 72.6100, risk: "MODERATE" }, { name: "GMC Sec 21", lat: 23.2300, lng: 72.6500, risk: "MODERATE" },
+            { name: "Infocity", lat: 23.1950, lng: 72.6250, risk: "HIGH" }
+        ];
+
+        const wardLayerGroup = L.layerGroup();
+        const wardBoundsDelta = 0.009;
+
+        tacticalWards.forEach(ward => {
+            const bounds = [[ward.lat - wardBoundsDelta, ward.lng - wardBoundsDelta], [ward.lat + wardBoundsDelta, ward.lng + wardBoundsDelta]];
+            
+            let strokeColor = "#0284c7"; let dash = "3,3";
+            if (ward.risk === "CRITICAL") { strokeColor = "#dc2626"; dash = "solid"; }
+            else if (ward.risk === "HIGH") { strokeColor = "#ea580c"; }
+
+            // Thicker lines for visibility on light maps
+            L.rectangle(bounds, { color: strokeColor, weight: 1.5, dashArray: dash, fillOpacity: 0.0 }).addTo(wardLayerGroup);
+
+            L.marker([ward.lat, ward.lng], {
+                icon: L.divIcon({ className: 'custom-div-icon', html: `<div class="mil-ward-label">${ward.name}</div>`, iconSize: [80, 20], iconAnchor: [40, 10] }),
+                interactive: false
+            }).addTo(wardLayerGroup);
+        });
+
+        // -------------------------------------------------------------------------
+        // 3. UHI AGENT: ORGANIC KERNEL DENSITY RASTER
+        // -------------------------------------------------------------------------
+        const kdeRasterPoints = [];
+
+        // Base ambient temperature radiating from wards
+        tacticalWards.forEach(ward => {
+            let baseIntensity = 0.2;
+            if(ward.risk === "MODERATE") baseIntensity = 0.45;
+            if(ward.risk === "HIGH") baseIntensity = 0.65;
+            if(ward.risk === "CRITICAL") baseIntensity = 0.85;
+
+            for(let i=0; i<60; i++) {
+                let u1 = Math.random(), u2 = Math.random();
+                let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+                let z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+                kdeRasterPoints.push([ward.lat + (z0 * 0.015), ward.lng + (z1 * 0.015), baseIntensity * Math.random()]);
+            }
+        });
+
+        // Critical High-Intensity Overlays
+        const anomalyCores = [
+            { lat: 22.9500, lng: 72.6050, label: "VATVA INDUSTRIAL", intensity: 400 },
+            { lat: 23.0250, lng: 72.6500, label: "ODHAV CORE", intensity: 350 },
+            { lat: 23.0300, lng: 72.5100, label: "BODAKDEV DENSE", intensity: 300 },
+            { lat: 23.0150, lng: 72.5800, label: "JAMALPUR HOTSPOT", intensity: 320 },
+            { lat: 23.0500, lng: 72.6100, label: "ASARWA ANOMALY", intensity: 220 },
+            { lat: 23.1950, lng: 72.6250, label: "INFOCITY TRAP", intensity: 250 }
+        ];
+
+        const hotspotLayerGroup = L.layerGroup();
+
+        anomalyCores.forEach(core => {
+            for (let i = 0; i < core.intensity; i++) {
+                let u1 = Math.random(), u2 = Math.random();
+                let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+                let z1 = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+                kdeRasterPoints.push([core.lat + (z0 * 0.007), core.lng + (z1 * 0.007), 1.0]);
+            }
+
+            L.circle([core.lat, core.lng], {
+                color: '#b91c1c', fillOpacity: 0.0, radius: 1200, weight: 2, dashArray: '4, 4'
+            }).addTo(hotspotLayerGroup);
+
+            L.marker([core.lat + 0.004, core.lng], {
+                icon: L.divIcon({
+                    className: 'custom-div-icon',
+                    html: `<div class="mil-hotspot-marker">⚠️ ${core.label}</div>`,
+                    iconSize: [160, 18], iconAnchor: [80, 9]
+                }), interactive: false
+            }).addTo(hotspotLayerGroup);
+        });
+
+        // Professional QGIS-style Heatmap (Tuned for Light Multiply Blending)
+        const kdeHeatLayer = L.heatLayer(kdeRasterPoints, {
+            radius: 35, blur: 25, maxZoom: 14, max: 1.0, minOpacity: 0.15,
+            gradient: {
+                0.1: '#0000ff', 0.3: '#00ffff', 0.5: '#00ff00', 
+                0.7: '#ffff00', 0.85: '#ff8000', 0.95: '#ff0000', 1.0: '#800000'  
+            }
+        });
+
+        // -------------------------------------------------------------------------
+        // 4. AERODYNAMIC WIND MODEL INTEGRATION (Vector Grid)
+        // -------------------------------------------------------------------------
+        const windLayerGroup = L.layerGroup();
+        
+        // Create a grid of wind arrows mapping simulated flow over Ahmedabad
+        for(let wLat = 22.95; wLat <= 23.25; wLat += 0.025) {
+            for(let wLng = 72.48; wLng <= 72.68; wLng += 0.025) {
+                // Determine wind direction (Base: NW to SE. Altered by urban density)
+                let rotation = 135; // Default NW->SE
+                if(wLng > 72.56 && wLng < 72.59) rotation = 160; // Funnels down the river
+                if(wLat < 23.00) rotation = 110; // Shifts south
+                
+                // SVG Arrow
+                const arrowSvg = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" style="transform: rotate(${rotation}deg);">
+                        <path d="M12 2L12 22M12 22L8 16M12 22L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                `;
+
+                L.marker([wLat, wLng], {
+                    icon: L.divIcon({
+                        className: 'wind-vector-icon',
+                        html: arrowSvg,
+                        iconSize: [24, 24], iconAnchor: [12, 12]
+                    }), interactive: false
+                }).addTo(windLayerGroup);
+            }
+        }
+
+        // Add default layers
+        kdeHeatLayer.addTo(map);
+        windLayerGroup.addTo(map);
+        wardLayerGroup.addTo(map);
+        hotspotLayerGroup.addTo(map);
+
+        // -------------------------------------------------------------------------
+        // 5. INTERACTIVE HOOKS
+        // -------------------------------------------------------------------------
+        function toggleGISLayer(type) {
+            if (type === 'kde') {
+                if (document.getElementById('layerKDE').checked) map.addLayer(kdeHeatLayer);
+                else map.removeLayer(kdeHeatLayer);
+            } else if (type === 'wind') {
+                if (document.getElementById('layerWind').checked) map.addLayer(windLayerGroup);
+                else map.removeLayer(windLayerGroup);
+            } else if (type === 'wards') {
+                if (document.getElementById('layerWards').checked) map.addLayer(wardLayerGroup);
+                else map.removeLayer(wardLayerGroup);
+            } else if (type === 'hotspots') {
+                if (document.getElementById('layerHotspots').checked) map.addLayer(hotspotLayerGroup);
+                else map.removeLayer(hotspotLayerGroup);
+            }
+        }
+
+        map.on('mousemove', function(e) {
+            document.getElementById('geodeticReadout').innerText = `LAT: ${e.latlng.lat.toFixed(4)}° N | LNG: ${e.latlng.lng.toFixed(4)}° E`;
+        });
+
+        map.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(4);
+            const lng = e.latlng.lng.toFixed(4);
+            const targetLock = L.circleMarker([lat, lng], { radius: 25, color: '#0ea5e9', fillColor: '#0ea5e9', fillOpacity: 0.4, weight: 3 }).addTo(map);
+            setTimeout(() => { window.location.href = `/inference/?lat=${lat}&lng=${lng}`; }, 350);
+        });
+    </script>
+</body>
+</html>

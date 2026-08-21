@@ -2,7 +2,9 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse, Http404
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.db.models import Avg, Max, Min, Count
 from django.conf import settings
@@ -19,6 +21,15 @@ from .scientific_modules import calculate_ventilation_index, calculate_groundwat
 from .report_generator import generate_pdf_report
 from .permissions import IsAdministrator, IsResearchAnalyst, IsPlanner
 from .aquifer_service import reconstruct_geological_layers, calculate_recharge_suitability, generate_optimal_recharge_sites
+from .agent import OmniSentinelAgent
+from django.http import Http404
+
+_sentinel_agent = None
+def get_sentinel_agent():
+    global _sentinel_agent
+    if _sentinel_agent is None:
+        _sentinel_agent = OmniSentinelAgent()
+    return _sentinel_agent
 
 # Authentication & Registration
 class RegisterView(APIView):
@@ -176,9 +187,9 @@ class AhmedabadBoundaryMapView(APIView):
         except Exception as e:
             return Response({"error": f"Failed to load boundary GeoJSON: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Generative AI Recommendations
+# Generative AI Recommendations & SANKALP Omni-Sentinel Agent Execution
 class MitigationRecommendationsView(APIView):
-    permission_classes = [IsPlanner]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         lat = request.data.get('latitude')
@@ -193,18 +204,59 @@ class MitigationRecommendationsView(APIView):
             env_data = sample_environmental_data(lon, lat)
             analysis = predict_heat_zone(env_data)
             
-            # Call Gemini service
-            recommendations = generate_mitigation_recommendations(lat, lon, env_data, analysis)
+            # Execute SANKALP 7-Node LangGraph Omni-Sentinel Agent
+            agent = get_sentinel_agent()
+            agent_result = agent.execute(temp_offset=0.0, wind_offset=0.0, lat=lat, lng=lon)
+            
+            # Also get detailed urban guidelines
+            gemini_recs = generate_mitigation_recommendations(lat, lon, env_data, analysis)
+            
+            # Combine SANKALP Autonomous Policy Draft with Gemini recommendations
+            opt = agent_result.get("optimization_results", {})
+            act = agent_result.get("actuation_commands", {}).get("hardware_triggers", {})
+            
+            sankalp_summary = (
+                f"## SANKALP Autonomous Microclimate Intervention Mandate\n\n"
+                f"- **Target Baseline LST**: {opt.get('initial_lst', env_data.get('lst', 40.0))}°C ➔ **Optimized LST**: {opt.get('final_lst', 34.0)}°C (Reduction: -{opt.get('lst_delta', 6.0)}°C)\n"
+                f"- **Structural Z-Axis Elevation**: Enforced to **{opt.get('final_height', 28.0)}m** across building canyon.\n"
+                f"- **Cool-Roof Material Albedo**: Minimum coating reflectivity **{opt.get('final_albedo', 0.70)}** mandated.\n"
+                f"- **Quantified Energy Economics**: **{opt.get('hvac_savings_mwh', 1.25)} MWh** daily peak HVAC power reduction.\n"
+                f"- **Swarm IoT Triggers**: Misting pulse `{act.get('misting_grid_pulse_ms', 1500)}ms` | Louver angle `{act.get('louver_servo_angle_deg', 45)}°` | Smart Glass `{act.get('smart_glass_opacity_pct', 75)}%`\n\n"
+                f"---\n\n"
+            )
+            
+            combined_recommendations = sankalp_summary + gemini_recs
             
             return Response({
                 'coordinates': {'latitude': lat, 'longitude': lon},
-                'recommendations': recommendations
+                'recommendations': combined_recommendations,
+                'sankalp': {
+                    'optimization': opt,
+                    'actuation': agent_result.get("actuation_commands"),
+                    'dossier_file': agent_result.get("dossier_path"),
+                    'logs': agent_result.get("status_logs"),
+                    'hardware_telemetry': agent_result.get("hardware_telemetry"),
+                    'live_weather': agent_result.get("live_weather"),
+                    'state_hash': agent_result.get("state_hash")
+                }
             })
             
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": f"Recommendation error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# SANKALP Cryptographic PDF Dossier Vault Downloader
+class DownloadDossierView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, filename):
+        filepath = os.path.join(settings.BASE_DIR, 'evidence_vault', filename)
+        if os.path.exists(filepath):
+            response = FileResponse(open(filepath, 'rb'), content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+        raise Http404("Dossier not found in Forensic Vault.")
 
 # Report Exporter
 class ExportPDFReportView(APIView):
@@ -493,4 +545,53 @@ class AquiferHotspotsView(APIView):
             }
         ]
         return Response(hotspots)
+
+
+# ==============================================================================
+# SANKALP ORIGINAL TACTICAL UI / UX VIEWS
+# ==============================================================================
+
+def sankalp_map_view(request):
+    """Serves the full-screen tactical military-grade GIS heatmap."""
+    return render(request, 'geo_analytics/map.html')
+
+def sankalp_inference_view(request):
+    """Serves the Three.js Quantum Command execution terminal."""
+    return render(request, 'geo_analytics/dashboard.html')
+
+def sankalp_mission_view(request):
+    """Serves the SANKALP Mission Control with radar sweeps and live agent terminal."""
+    return render(request, 'index.html')
+
+@csrf_exempt
+def matrix_api(request):
+    """Direct LangGraph API Bridge powering SANKALP UI/UX."""
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            lat = float(body.get('lat', 23.0225))
+            lng = float(body.get('lng', 72.5714))
+            temp_offset = float(body.get('temp_offset', 0.0))
+            wind_offset = float(body.get('wind_offset', 0.0))
+            
+            agent = get_sentinel_agent()
+            result = agent.execute(temp_offset, wind_offset, lat, lng)
+            
+            if not result.get("security_clearance"):
+                return JsonResponse({"status": "error", "logs": result.get("status_logs")}, status=403)
+                
+            return JsonResponse({
+                "status": "success",
+                "logs": result.get("status_logs"),
+                "policy_document": result.get("final_policy_draft"),
+                "dossier_file": result.get("dossier_path"),
+                "data": result.get("optimization_results"),
+                "map_coordinates": result.get("map_coordinates"),
+                "telemetry": result.get("hardware_telemetry"),
+                "live_weather": result.get("live_weather"),
+                "actuation_commands": result.get("actuation_commands")
+            })
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    return JsonResponse({"status": "error", "message": "POST request required."}, status=400)
 

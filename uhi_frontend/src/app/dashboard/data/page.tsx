@@ -143,7 +143,7 @@ export default function DataAndAuditingPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Upload Pane - Blended Glass */}
         {['ADMIN', 'ANALYST'].includes(role) && (
-          <div className="lg:col-span-1 p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm h-fit space-y-5 shadow-xl text-slate-100">
+          <div className="lg:col-span-1 p-6 rounded-2xl cosmic-card h-fit space-y-5 shadow-xl text-slate-100">
             <h3 className="text-xs font-extrabold uppercase tracking-wider flex items-center gap-2" style={{ color: '#a7cecd' }}>
               <Upload size={16} style={{ color: '#a7cecd' }} />
               Ingest New Dataset
@@ -213,12 +213,12 @@ export default function DataAndAuditingPage() {
 
           <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
             {datasets.length === 0 ? (
-              <div className="p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm text-center">
+              <div className="p-6 rounded-2xl cosmic-card text-center">
                 <p className="text-xs text-slate-400 font-medium italic">No custom user layers ingested.</p>
               </div>
             ) : (
               datasets.map((dataset) => (
-                <div key={dataset.id} className="p-4 rounded-xl border border-white/10 bg-black/25 backdrop-blur-sm flex items-start justify-between text-xs text-slate-100 shadow-md">
+                <div key={dataset.id} className="p-4 rounded-xl cosmic-card flex items-start justify-between text-xs text-slate-100 shadow-md">
                   <div className="space-y-1.5 max-w-[70%]">
                     <div className="flex items-center gap-2.5">
                       <span className="font-extrabold text-slate-100 break-all">{dataset.file_name}</span>
@@ -262,7 +262,7 @@ export default function DataAndAuditingPage() {
             </button>
           </div>
 
-          <div className="bg-black/35 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+          <div className="cosmic-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
             <div className="max-h-72 overflow-y-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead className="sticky top-0 bg-black/70 backdrop-blur-md border-b border-white/10 text-[10px] font-extrabold text-slate-300 uppercase tracking-wider">
@@ -287,10 +287,10 @@ export default function DataAndAuditingPage() {
                           {new Date(log.timestamp).toLocaleTimeString()}
                         </td>
                         <td className="p-3">
-                          <span className={`px-2 py-0.5 rounded text-[8px] font-extrabold uppercase ${
+                          <span className={`text-[9px] font-extrabold uppercase tracking-wider ${
                             log.event_type_display.includes('Success') 
-                              ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-700/40' 
-                              : 'bg-rose-950/60 text-rose-300 border border-rose-700/40'
+                              ? 'text-emerald-400' 
+                              : 'text-rose-400'
                           }`}>
                             {log.event_type_display}
                           </span>

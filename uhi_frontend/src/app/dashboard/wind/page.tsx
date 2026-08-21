@@ -62,7 +62,7 @@ export default function WindCorridorsPage() {
           <div className="space-y-6">
             {/* CFD indicators */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Ventilation Efficiency</span>
                   <span className="text-3xl font-black text-white mt-1 block tracking-tight">
@@ -74,7 +74,7 @@ export default function WindCorridorsPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Calculated Wind Velocity</span>
                   <span className="text-3xl font-black text-white mt-1 block tracking-tight">
@@ -86,13 +86,13 @@ export default function WindCorridorsPage() {
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+              <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
                 <div>
                   <span className="text-[9px] font-bold text-zinc-500 block uppercase tracking-wider">Obstruction Category</span>
-                  <span className={`text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider w-fit mt-2 block border ${
+                  <span className={`text-xs font-extrabold uppercase tracking-wider w-fit mt-2 block ${
                     analysisResult.wind_corridor.obstruction_status.includes('High')
-                      ? 'bg-rose-950/40 border-rose-800/60 text-rose-400'
-                      : 'bg-emerald-950/40 border-emerald-800/60 text-emerald-400'
+                      ? 'text-rose-400'
+                      : 'text-emerald-400'
                   }`}>
                     {analysisResult.wind_corridor.obstruction_status}
                   </span>
@@ -104,7 +104,7 @@ export default function WindCorridorsPage() {
             </div>
 
             {/* 2D Wind Vector Field Grid (CFD Simulation) */}
-            <div className="p-6 rounded-2xl border border-zinc-900 bg-zinc-950 space-y-4 shadow-xl">
+            <div className="p-6 rounded-2xl cosmic-card space-y-4 shadow-xl">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                   <Compass size={16} className="text-[#a7cecd] animate-spin" />
@@ -147,7 +147,7 @@ export default function WindCorridorsPage() {
             </div>
 
             {/* Building Height Recommendations */}
-            <div className="p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm space-y-4 shadow-xl">
+            <div className="p-6 rounded-2xl cosmic-card space-y-4 shadow-xl">
               <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <Landmark size={16} className="text-[#a7cecd]" />
                 Zoning & Height Regulations

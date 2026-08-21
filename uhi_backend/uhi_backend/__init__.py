@@ -1,4 +1,3 @@
-# Load celery app when Django starts
-from .celery import app as celery_app
+# uhi_backend package
 
-__all__ = ('celery_app',)
+

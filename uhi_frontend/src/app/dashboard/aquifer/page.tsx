@@ -369,7 +369,7 @@ export default function AquiferOraclePage() {
               <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 <span>Base Elevation (DEM)</span>
                 {autoSample && sampledFromSatellite && (
-                  <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 uppercase tracking-wider">Satellite Feed</span>
+                  <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">Satellite Feed</span>
                 )}
               </div>
               <input
@@ -407,7 +407,7 @@ export default function AquiferOraclePage() {
                 <span>Vegetation Index (NDVI)</span>
                 <div className="flex items-center gap-1.5">
                   {autoSample && sampledFromSatellite && (
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 uppercase tracking-wider">Satellite Feed</span>
+                    <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">Satellite Feed</span>
                   )}
                   <span className="font-mono text-[#a7cecd]">{ndvi.toFixed(2)}</span>
                 </div>
@@ -430,7 +430,7 @@ export default function AquiferOraclePage() {
                 <span>Soil Moisture Index (NDWI)</span>
                 <div className="flex items-center gap-1.5">
                   {autoSample && sampledFromSatellite && (
-                    <span className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 uppercase tracking-wider">Satellite Feed</span>
+                    <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-wider">Satellite Feed</span>
                   )}
                   <span className="font-mono text-[#a7cecd]">{ndwi.toFixed(2)}</span>
                 </div>

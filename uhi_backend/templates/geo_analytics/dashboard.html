@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANKALP | Quantum Command</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js Core & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --neon-cyan: #00f0ff; --neon-magenta: #ff003c; --dark-void: #030305; --glass: rgba(10, 10, 15, 0.45); }
+        body { background-color: var(--dark-void); color: #fff; font-family: 'Space Grotesk', sans-serif; overflow: hidden; margin: 0; padding: 0; height: 100vh; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .ambient-blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; animation: drift 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); z-index: -1; pointer-events: none; }
+        .blob-1 { width: 600px; height: 600px; background: var(--neon-cyan); top: -10%; left: -10%; }
+        .blob-2 { width: 500px; height: 500px; background: var(--neon-magenta); bottom: -10%; right: -10%; animation-delay: -5s; }
+        @keyframes drift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(150px, 100px) scale(1.2); } }
+
+        .quantum-glass {
+            background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cypher-text { display: inline-block; }
+        .log-entry { margin-bottom: 12px; font-size: 11px; line-height: 1.6; color: #a1a1aa; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 12px; transition: all 0.3s; }
+        .log-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-right: 8px; background: rgba(255,255,255,0.1); }
+        .log-active { border-left-color: var(--neon-cyan); color: #fff; text-shadow: 0 0 15px rgba(0, 240, 255, 0.8); background: rgba(0, 240, 255, 0.03); }
+
+        .timeline-track { position: relative; padding: 20px; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; background: rgba(0,0,0,0.3); overflow: hidden; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .timeline-collapsed { opacity: 0.2; filter: grayscale(100%) blur(2px); transform: scale(0.96); border-color: var(--neon-magenta); }
+        .timeline-optimal { border-color: var(--neon-cyan); box-shadow: 0 0 40px rgba(0, 240, 255, 0.2); background: rgba(0, 240, 255, 0.04); transform: scale(1.02); }
+        
+        .sync-btn {
+            position: relative; overflow: hidden; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 20px; border-radius: 16px; font-weight: 700; letter-spacing: 2px;
+            cursor: pointer; transition: all 0.2s; outline: none; user-select: none;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+        .sync-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: var(--neon-cyan); z-index: -1; transition: width 0.05s linear; box-shadow: 0 0 30px var(--neon-cyan); }
+        .sync-btn:active { transform: scale(0.98); }
+        
+        .text-shadow-glow { text-shadow: 0 0 25px rgba(0, 240, 255, 0.6); }
+
+        .swarm-grid { opacity: 0.3; transition: opacity 0.5s; }
+        .swarm-grid.active { opacity: 1; }
+        .swarm-grid.active .swarm-node { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); animation: pulse-node 1.5s infinite alternate; }
+        .swarm-grid.active .swarm-node:nth-child(odd) { animation-delay: 0.5s; background: var(--neon-magenta); box-shadow: 0 0 8px var(--neon-magenta); }
+        @keyframes pulse-node { 0% { opacity: 0.2; } 100% { opacity: 1; } }
+
+        /* Crosshair for 3D view */
+        #three-canvas-container:active { cursor: grabbing; }
+    </style>
+</head>
+<body class="p-6 flex flex-col gap-6">
+
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+
+    <header class="flex justify-between items-center z-10 shrink-0">
+        <div>
+            <div class="text-[10px] font-mono text-cyan-400 tracking-[0.3em] mb-1 uppercase">Tri-Domain Architecture v4.0 // OSM + Sentinel-3</div>
+            <h1 class="text-3xl font-bold tracking-tighter">OMNI-SENTINEL</h1>
+        </div>
+        <div class="flex gap-4">
+            <div class="quantum-glass px-4 py-2 flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
+                <span class="font-mono text-xs text-slate-300" id="targetCoords">SYS_TARGET: ALIGNING...</span>
+            </div>
+            <a href="/" class="quantum-glass px-6 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-colors flex items-center justify-center">
+                ABORT SEQUENCE
+            </a>
+        </div>
+    </header>
+
+    <main class="grid grid-cols-12 gap-6 flex-1 min-h-0 z-10">
+        
+        <div class="col-span-4 quantum-glass p-6 flex flex-col min-h-0 relative pointer-events-none">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70 animate-pulse"></div>
+            <h2 class="text-[10px] font-mono tracking-[0.2em] text-slate-400 mb-6 uppercase border-b border-white/10 pb-4">Neuro-Symbolic Thought Trace</h2>
+            
+            <div id="terminal" class="flex-1 overflow-y-auto font-mono pr-2 pointer-events-auto custom-scrollbar">
+                <div class="log-entry log-active" id="initLog">
+                    <span class="log-tag text-cyan-400">SYNC</span><span class="cypher-text">ESTABLISHING QUANTUM LINK...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-5 flex flex-col gap-6 min-h-0">
+            
+            <div class="quantum-glass p-6 shrink-0 pointer-events-none">
+                <h2 class="text-[10px] font-mono tracking-[0.2em] text-slate-400 mb-4 uppercase">Predictive Timeline Collapse</h2>
+                <div class="flex gap-4">
+                    <div id="timeline-1" class="timeline-track flex-1 text-center">
+                        <div class="text-xs text-red-400 font-bold mb-1">TL-Alpha</div>
+                        <div class="text-[10px] text-slate-400 font-mono">UHI Cascading Failure</div>
+                    </div>
+                    <div id="timeline-2" class="timeline-track flex-1 text-center">
+                        <div class="text-xs text-yellow-400 font-bold mb-1">TL-Beta</div>
+                        <div class="text-[10px] text-slate-400 font-mono">Status Quo Decay</div>
+                    </div>
+                    <div id="timeline-3" class="timeline-track flex-1 text-center timeline-optimal opacity-50">
+                        <div class="text-xs text-cyan-400 font-bold mb-1">SANKALP Prime</div>
+                        <div class="text-[10px] text-slate-400 font-mono">Generative Equilibrium</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core 3D Interactive Telemetry Matrix -->
+            <div class="quantum-glass p-1 flex-1 flex flex-col relative overflow-hidden group min-h-[400px]">
+                
+                <div id="three-canvas-container" class="absolute inset-0 z-0 opacity-100 cursor-move pointer-events-auto"></div>
+                
+                <div class="absolute top-14 right-6 text-[8px] font-mono text-cyan-400/80 uppercase tracking-widest pointer-events-none z-10 animate-pulse">
+                    [ PAN / ORBIT / ZOOM ENABLED ]
+                </div>
+                
+                <div class="absolute top-4 left-6 right-6 flex justify-between items-center text-[9px] font-mono tracking-widest text-slate-400 z-10 bg-black/60 px-4 py-2 rounded-full backdrop-blur-md border border-white/10 pointer-events-none">
+                    <div class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        OPTICAL Δ: <span id="valOpticalDelta" class="text-cyan-400 font-bold">--.----</span>
+                    </div>
+                    <div id="quarantineStatus" class="text-emerald-400 font-bold tracking-wider">SYS_INTEGRITY: SECURE</div>
+                </div>
+
+                <div class="absolute top-20 right-6 z-10 pointer-events-none bg-black/60 p-3 rounded-lg border border-white/10 backdrop-blur-md">
+                    <div class="text-[8px] font-mono tracking-widest text-slate-400 uppercase mb-2 text-right">Edge Swarm</div>
+                    <div class="swarm-grid flex gap-1.5 flex-wrap w-16 justify-end" id="swarmGrid">
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                        <div class="w-2 h-2 rounded-sm bg-white/20 swarm-node"></div>
+                    </div>
+                </div>
+
+                <!-- Precision Tensor Data Overlay -->
+                <div class="absolute bottom-4 left-4 z-10 bg-black/80 backdrop-blur-xl border border-white/10 p-5 rounded-2xl w-64 shadow-2xl pointer-events-none">
+                    <div class="text-[9px] font-mono tracking-widest text-cyan-400 uppercase mb-4 border-b border-white/20 pb-2">Thermodynamic Tensors</div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-[10px] font-mono text-slate-300">
+                            <span>NDBI (Built-up)</span>
+                            <span id="valNDBI" class="text-fuchsia-400 font-bold">0.2800 ➔ --.----</span>
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] font-mono text-slate-300">
+                            <span>Surface Albedo</span>
+                            <span id="valAlbedoDetailed" class="text-emerald-400 font-bold">0.1500 ➔ --.----</span>
+                        </div>
+                        <div class="flex justify-between items-center text-[10px] font-mono text-slate-300 bg-cyan-900/40 p-2 rounded border border-cyan-500/30">
+                            <span>Grid HVAC Load</span>
+                            <span id="valHVACDetailed" class="text-cyan-400 font-bold">- --.---- MWh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Target Metrics -->
+                <div class="absolute bottom-4 right-4 z-10 bg-black/80 backdrop-blur-xl border border-white/10 p-5 rounded-2xl text-right w-56 shadow-2xl pointer-events-none">
+                    <div class="text-[9px] font-mono tracking-widest text-slate-400 uppercase mb-1">Z-Axis Morph Target</div>
+                    <div class="text-4xl font-bold tracking-tighter text-cyan-400 text-shadow-glow flex justify-end items-baseline gap-1">
+                        <span id="valHeightDetailed">--</span><span class="text-sm text-slate-500">m</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-white/20 flex justify-between items-center text-[10px] font-mono">
+                        <span class="text-slate-400">Base: <span id="valBaseLSTDetailed">--.--</span></span>
+                        <div class="text-emerald-400 flex items-center gap-1 font-bold">
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></div> LST: <span id="valOptLSTDetailed">--.--</span>°C
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-3 flex flex-col gap-6 min-h-0">
+            <div class="quantum-glass p-6 flex flex-col flex-1 pointer-events-none">
+                <h2 class="text-[10px] font-mono tracking-[0.2em] text-slate-400 mb-4 uppercase border-b border-white/10 pb-4">Synthesized Directives</h2>
+                <div id="policyText" class="flex-1 font-mono text-[10px] leading-relaxed text-slate-300 overflow-y-auto pointer-events-auto custom-scrollbar">
+                    Awaiting computational matrix...
+                </div>
+            </div>
+
+            <button id="authBtn" class="sync-btn shrink-0 pointer-events-none opacity-50 flex items-center justify-center gap-3">
+                <div class="sync-fill" id="syncFill"></div>
+                <svg class="w-5 h-5 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
+                <span class="z-10 uppercase text-xs" id="authText">HOLD TO AUTHORIZE</span>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetLat = urlParams.get('lat') || 23.0225;
+        const targetLng = urlParams.get('lng') || 72.5714;
+        let serverDossierFile = "";
+
+        const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>_-\\/";
+        
+        async function matrixDecrypt(element, finalString, speed = 15) {
+            return new Promise(resolve => {
+                let iteration = 0;
+                const interval = setInterval(() => {
+                    element.innerText = finalString.split("").map((letter, index) => {
+                        if(index < iteration) return finalString[index];
+                        return glyphs[Math.floor(Math.random() * glyphs.length)];
+                    }).join("");
+                    if(iteration >= finalString.length) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                    iteration += 1/2;
+                }, speed);
+            });
+        }
+
+        async function pushLog(tagText, logText) {
+            const term = document.getElementById('terminal');
+            document.querySelectorAll('.log-entry').forEach(el => el.classList.remove('log-active'));
+            
+            let color = 'text-slate-400';
+            if(tagText === 'CYBER') color = 'text-orange-400';
+            if(tagText === 'VISION' || tagText === 'VISION-ALERT') color = 'text-blue-400';
+            if(tagText === 'PLANNER') color = 'text-green-400';
+            if(tagText === 'SYNTH') color = 'text-purple-400';
+            if(tagText === 'SYS') color = 'text-cyan-400';
+            if(tagText === 'DEFENSE') color = 'text-red-500';
+            if(tagText === 'ACTUATOR') color = 'text-yellow-400';
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry log-active';
+            
+            const tag = document.createElement('span');
+            tag.className = `log-tag ${color}`;
+            tag.innerText = tagText;
+            
+            const textEl = document.createElement('span');
+            textEl.className = 'cypher-text text-cyan-200';
+            
+            entry.appendChild(tag);
+            entry.appendChild(textEl);
+            term.appendChild(entry);
+            term.scrollTop = term.scrollHeight;
+
+            await matrixDecrypt(textEl, logText, 10);
+            textEl.className = 'cypher-text text-slate-300';
+        }
+
+        window.onload = () => {
+            document.getElementById('targetCoords').innerText = `${targetLat} // ${targetLng}`;
+            setTimeout(() => {
+                init3DEnvironment();
+                executePipeline();
+            }, 300);
+        };
+
+        async function executePipeline() {
+            try {
+                const res = await fetch('/api/matrix/', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ lat: targetLat, lng: targetLng })
+                });
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                const data = await res.json();
+                
+                if(data.logs) {
+                    for (let i = 0; i < data.logs.length; i++) {
+                        let log = data.logs[i];
+                        let tag = 'SYS';
+                        
+                        if(log.includes('[CYBER-ALERT]')) { tag = 'DEFENSE'; log = log.replace('[CYBER-ALERT]', ''); }
+                        else if(log.includes('[CYBER]')) { tag = 'CYBER'; log = log.replace('[CYBER]', ''); }
+                        else if(log.includes('[DEFENSE-ALERT]')) { tag = 'DEFENSE'; log = log.replace('[DEFENSE-ALERT]', ''); }
+                        else if(log.includes('[DEFENSE]')) { tag = 'DEFENSE'; log = log.replace('[DEFENSE]', ''); }
+                        else if(log.includes('[ACTUATOR-WARN]')) { tag = 'ACTUATOR'; log = log.replace('[ACTUATOR-WARN]', ''); }
+                        else if(log.includes('[ACTUATOR]')) { tag = 'ACTUATOR'; log = log.replace('[ACTUATOR]', ''); }
+                        else if(log.includes('[SYS-SECURITY]')) { tag = 'DEFENSE'; log = log.replace('[SYS-SECURITY]', ''); }
+                        else if(log.includes('[VISION-ALERT]')) { tag = 'VISION-ALERT'; log = log.replace('[VISION-ALERT]', ''); }
+                        else if(log.includes('[VISION]')) { tag = 'VISION'; log = log.replace('[VISION]', ''); }
+                        else if(log.includes('[PLANNER]')) { tag = 'PLANNER'; log = log.replace('[PLANNER]', ''); }
+                        else if(log.includes('[LLM]')) { tag = 'SYNTH'; log = log.replace('[LLM]', ''); }
+                        else if(log.includes('[SYS]')) { tag = 'SYS'; log = log.replace('[SYS]', ''); }
+                        else if(log.includes('[SYSTEM]')) { tag = 'SYS'; log = log.replace('[SYSTEM]', ''); }
+
+                        if(tag === 'DEFENSE' && log.includes('quarantined')) {
+                            const qStatus = document.getElementById('quarantineStatus');
+                            qStatus.innerText = 'SYS_INTEGRITY: COMPROMISED [QUARANTINE]';
+                            qStatus.classList.replace('text-emerald-400', 'text-red-500');
+                            qStatus.classList.add('animate-pulse');
+                        }
+                        
+                        await pushLog(tag, log.trim());
+                        await new Promise(r => setTimeout(r, 120));
+                    }
+                }
+
+                if(data.status === 'success') {
+                    document.getElementById('timeline-1').classList.add('timeline-collapsed');
+                    setTimeout(() => document.getElementById('timeline-2').classList.add('timeline-collapsed'), 300);
+                    setTimeout(() => document.getElementById('timeline-3').classList.remove('opacity-50', 'timeline-optimal'), 600);
+                    document.getElementById('timeline-3').classList.add('timeline-optimal');
+                    setTimeout(() => document.getElementById('swarmGrid').classList.add('active'), 800);
+
+                    setTimeout(async () => {
+                        const opticalDeltaVal = (Math.random() * (0.45 - 0.15) + 0.15).toFixed(4); 
+                        await matrixDecrypt(document.getElementById('valOpticalDelta'), opticalDeltaVal, 20);
+                        await matrixDecrypt(document.getElementById('valNDBI'), `0.2800 ➔ ${(0.28 - (data.data.cycles * 0.05)).toFixed(4)}`, 10);
+                        await matrixDecrypt(document.getElementById('valAlbedoDetailed'), `0.1500 ➔ ${data.data.final_albedo.toFixed(4)}`, 10);
+                        await matrixDecrypt(document.getElementById('valHVACDetailed'), `- ${data.data.hvac_savings_mwh.toFixed(4)} MWh`, 10);
+                        
+                        await matrixDecrypt(document.getElementById('valBaseLSTDetailed'), data.data.initial_lst.toFixed(2), 25);
+                        await matrixDecrypt(document.getElementById('valHeightDetailed'), data.data.final_height.toString(), 25);
+                        await matrixDecrypt(document.getElementById('valOptLSTDetailed'), data.data.final_lst.toFixed(2), 25);
+                        
+                        if (typeof execute3DMorph === "function") {
+                            execute3DMorph(data.data.final_height, data.data.final_wind);
+                        }
+                    }, 800);
+
+                    serverDossierFile = data.dossier_file;
+                    setTimeout(async () => {
+                        const policyEl = document.getElementById('policyText');
+                        policyEl.innerHTML = '';
+                        await matrixDecrypt(policyEl, data.policy_document, 4);
+                        setupBiometricAuth();
+                    }, 1200);
+                }
+            } catch (err) {
+                await pushLog('CRITICAL', 'API OFFLINE. SECURE CONNECTION SEVERED.');
+                await pushLog('SYS', 'Ensure SentinelHub API keys are bypassed or valid in agent.py');
+            }
+        }
+
+        function setupBiometricAuth() {
+            const btn = document.getElementById('authBtn');
+            const fill = document.getElementById('syncFill');
+            const text = document.getElementById('authText');
+            let holdTimer;
+            let progress = 0;
+            btn.classList.remove('pointer-events-none', 'opacity-50');
+
+            const startSync = () => {
+                text.innerText = 'SYNCHRONIZING NEURAL HASH...';
+                holdTimer = setInterval(() => {
+                    progress += 2;
+                    fill.style.width = `${progress}%`;
+                    if(progress >= 100) { clearInterval(holdTimer); completeSync(); }
+                }, 20);
+            };
+            const stopSync = () => {
+                if(progress >= 100) return;
+                clearInterval(holdTimer); progress = 0; fill.style.width = '0%'; text.innerText = 'HOLD TO AUTHORIZE';
+            };
+            const completeSync = () => {
+                text.innerText = 'DOSSIER SECURED & ENCRYPTED';
+                btn.style.background = 'var(--neon-cyan)'; btn.style.color = '#000'; btn.classList.add('pointer-events-none');
+                setTimeout(() => { window.location.href = `/vault/download/${serverDossierFile}/`; }, 500);
+            };
+
+            btn.addEventListener('mousedown', startSync); btn.addEventListener('mouseup', stopSync);
+            btn.addEventListener('mouseleave', stopSync); btn.addEventListener('touchstart', (e) => { e.preventDefault(); startSync(); });
+            btn.addEventListener('touchend', stopSync);
+        }
+
+        // =========================================================================
+        // --- REALISTIC 3D MICROCLIMATE SIMULATOR ---
+        // =========================================================================
+        let scene, camera, renderer, controls;
+        let mainTowerGroup, scalableTower, roofCap;
+        let windowTex, mainGlassMat, roofMat;
+        let particleSystem, windSpeedMultiplier = 0.5;
+
+        function init3DEnvironment() {
+            const container = document.getElementById('three-canvas-container');
+            if(!container) return;
+            
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x05050a, 0.008); 
+            
+            // --- High-Fidelity Lighting (Fixes brightness issue) ---
+            scene.add(new THREE.AmbientLight(0xffffff, 0.8)); 
+            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444455, 0.6); 
+            scene.add(hemiLight);
+            
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            dirLight.position.set(50, 80, -30);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            scene.add(dirLight);
+
+            const neonLight = new THREE.PointLight(0x00f0ff, 1.5, 100);
+            neonLight.position.set(0, 30, 20);
+            scene.add(neonLight);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(55, 45, 60); 
+            camera.lookAt(0, 10, 0);
+
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Cinematic Tone Mapping
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            container.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+            controls.maxPolarAngle = Math.PI / 2 - 0.05; 
+
+            const groundMat = new THREE.MeshStandardMaterial({ color: 0x050508, roughness: 0.8, metalness: 0.2 });
+            const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), groundMat);
+            ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
+            scene.add(ground);
+
+            const gridHelper = new THREE.GridHelper(100, 50, 0x00f0ff, 0x111122);
+            gridHelper.material.opacity = 0.3; gridHelper.material.transparent = true;
+            gridHelper.position.y = 0.1;
+            scene.add(gridHelper);
+
+            // --- Procedural High-Res Texture ---
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#0f172a'; // Mullion frame color
+            ctx.fillRect(0, 0, 1024, 1024);
+            
+            for(let r=0; r<16; r++) {
+                for(let c=0; c<16; c++) {
+                    const isLit = Math.random() > 0.65;
+                    ctx.fillStyle = isLit ? '#bae6fd' : '#020617'; 
+                    ctx.fillRect(c*64 + 4, r*64 + 4, 56, 56);
+                }
+            }
+            
+            windowTex = new THREE.CanvasTexture(canvas);
+            windowTex.wrapS = THREE.RepeatWrapping; windowTex.wrapT = THREE.RepeatWrapping;
+            windowTex.repeat.set(2, 4); 
+            windowTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+            mainGlassMat = new THREE.MeshStandardMaterial({ 
+                map: windowTex, color: 0xaaaaaa, metalness: 0.8, roughness: 0.2, 
+                emissive: 0x38bdf8, emissiveMap: windowTex, emissiveIntensity: 0.5 
+            });
+            const cityBlockMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9, metalness: 0.2 });
+            roofMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8, metalness: 0.2 }); 
+
+            // --- 1. Procedural Surrounding City Block ---
+            const cityGroup = new THREE.Group();
+            for(let i = 0; i < 40; i++) {
+                const w = 4 + Math.random() * 8;
+                const d = 4 + Math.random() * 8;
+                const h = 5 + Math.random() * 15;
+                const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), cityBlockMat);
+                let px = (Math.random() - 0.5) * 80;
+                let pz = (Math.random() - 0.5) * 80;
+                if(Math.abs(px) < 15 && Math.abs(pz) < 15) { px += 20 * Math.sign(px || 1); }
+                mesh.position.set(px, h/2, pz);
+                mesh.castShadow = true; mesh.receiveShadow = true;
+                cityGroup.add(mesh);
+            }
+            scene.add(cityGroup);
+
+            // --- 2. Procedural Urban Canopy (Trees) ---
+            const treeGroup = new THREE.Group();
+            const trunkMat = new THREE.MeshStandardMaterial({color: 0x3d2817, roughness: 1.0});
+            const leavesMat = new THREE.MeshStandardMaterial({color: 0x064e3b, roughness: 0.9});
+            for(let i=0; i<30; i++) {
+                const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 2), trunkMat);
+                const leaves = new THREE.Mesh(new THREE.ConeGeometry(2, 4, 5), leavesMat);
+                leaves.position.y = 2.5; trunk.position.y = 1;
+                const tree = new THREE.Group(); tree.add(trunk, leaves);
+                let px = (Math.random() - 0.5) * 40;
+                let pz = (Math.random() - 0.5) * 40;
+                if(Math.abs(px) < 8 && Math.abs(pz) < 8) px += 10;
+                tree.position.set(px, 0, pz);
+                tree.castShadow = true; tree.receiveShadow = true;
+                treeGroup.add(tree);
+            }
+            scene.add(treeGroup);
+
+            // --- 3. Build Main Target Skyscraper ---
+            mainTowerGroup = new THREE.Group();
+
+            const baseGeo = new THREE.BoxGeometry(16, 4, 16);
+            const baseMesh = new THREE.Mesh(baseGeo, mainGlassMat);
+            baseMesh.position.y = 2; baseMesh.castShadow = true; baseMesh.receiveShadow = true;
+            mainTowerGroup.add(baseMesh);
+
+            // Tower Pivot Fixed - Eliminates "Flying" Bug
+            scalableTower = new THREE.Group();
+            const coreMesh = new THREE.Mesh(new THREE.BoxGeometry(10, 15, 10), mainGlassMat);
+            coreMesh.position.y = 7.5; // Centers geometry to scale from bottom
+            coreMesh.castShadow = true;
+            scalableTower.add(coreMesh);
+            scalableTower.position.y = 4; // Absolute base position, DOES NOT CHANGE
+            mainTowerGroup.add(scalableTower);
+
+            roofCap = new THREE.Group();
+            const r1 = new THREE.Mesh(new THREE.BoxGeometry(10.5, 1, 10.5), roofMat); r1.position.y = 0.5; r1.castShadow = true;
+            const r2 = new THREE.Mesh(new THREE.BoxGeometry(6, 1.5, 6), roofMat); r2.position.y = 1.75; r2.castShadow = true;
+            const ant = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4), new THREE.MeshStandardMaterial({color: 0x555555})); ant.position.y = 4;
+            roofCap.add(r1, r2, ant);
+            roofCap.position.y = 19;
+            mainTowerGroup.add(roofCap);
+
+            scene.add(mainTowerGroup);
+
+            // --- 4. Aerodynamic Wind Particle System ---
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 600;
+            const posArray = new Float32Array(particleCount * 3);
+            for(let i=0; i<particleCount*3; i+=3) {
+                posArray[i] = -40 + Math.random() * 80;   
+                posArray[i+1] = 2 + Math.random() * 30;   
+                posArray[i+2] = -40 + Math.random() * 80; 
+            }
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            const pMaterial = new THREE.PointsMaterial({
+                color: 0x00f0ff, size: 0.5, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending
+            });
+            particleSystem = new THREE.Points(particleGeo, pMaterial);
+            scene.add(particleSystem);
+
+            animate3D();
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            if(controls) controls.update(); 
+            
+            // Render Wind Matrix
+            if(particleSystem) {
+                const positions = particleSystem.geometry.attributes.position.array;
+                for(let i=0; i<positions.length; i+=3) {
+                    positions[i] += windSpeedMultiplier; // Direct Velocity mapping
+                    positions[i+1] += Math.sin(positions[i] * 0.1) * 0.05; 
+                    
+                    if(positions[i] > 40) {
+                        positions[i] = -40;
+                        positions[i+1] = 2 + Math.random() * 30;
+                    }
+                }
+                particleSystem.geometry.attributes.position.needsUpdate = true;
+            }
+            renderer.render(scene, camera);
+        }
+
+        function execute3DMorph(targetHeight, targetWindSpeed) {
+            if(!scalableTower) return;
+            
+            const scaleFactor = targetHeight / 15.0; 
+            let currentScale = 1.0;
+            controls.autoRotate = false;
+            
+            // Inject Sankalp Wind Agent Speed directly to visual simulation
+            windSpeedMultiplier = targetWindSpeed ? (targetWindSpeed / 4.0) : 1.5; 
+            
+            const morphInterval = setInterval(() => {
+                currentScale += 0.03; 
+                if(currentScale >= scaleFactor) {
+                    currentScale = scaleFactor;
+                    clearInterval(morphInterval);
+                    
+                    // Albedo Shift Trigger
+                    roofMat.color.setHex(0xf8fafc);
+                    roofMat.metalness = 0.6;
+                    roofMat.roughness = 0.1;
+                    
+                    mainGlassMat.emissive.setHex(0x10b981);
+                    particleSystem.material.color.setHex(0x10b981);
+                    setTimeout(() => { controls.autoRotate = true; }, 2000);
+                }
+                
+                scalableTower.scale.y = currentScale;
+                windowTex.repeat.y = 4 * currentScale; // Seamless UV scaling
+                
+                // Roofcap anchors perfectly to the rising structure
+                roofCap.position.y = 4 + (15 * currentScale);
+                
+            }, 30);
+        }
+    </script>
+</body>
+</html>

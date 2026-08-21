@@ -63,12 +63,52 @@ interface AnalysisResult {
   };
 }
 
+export interface SankalpOptimization {
+  initial_height: number;
+  initial_lst: number;
+  initial_wind: number;
+  initial_albedo: number;
+  final_height: number;
+  final_lst: number;
+  final_wind: number;
+  final_albedo: number;
+  hvac_savings_mwh: number;
+  cycles: number;
+  lst_delta: number;
+  wind_delta: number;
+}
+
+export interface SankalpActuation {
+  target_zone_lat: number;
+  target_zone_lng: number;
+  hardware_triggers: {
+    louver_servo_angle_deg: number;
+    misting_grid_pulse_ms: number;
+    smart_glass_opacity_pct: number;
+  };
+  protocol: string;
+}
+
+export interface SankalpData {
+  optimization?: SankalpOptimization;
+  actuation?: SankalpActuation;
+  dossier_file?: string;
+  logs?: string[];
+  hardware_telemetry?: Record<string, string>;
+  live_weather?: {
+    ambient_temp: number;
+    synoptic_wind: number;
+  };
+  state_hash?: string;
+}
+
 interface AppState {
   token: string | null;
   user: User | null;
   selectedCoords: { lat: number; lng: number } | null;
   analysisResult: AnalysisResult | null;
   recommendations: string | null;
+  sankalpData: SankalpData | null;
   loading: boolean;
   error: string | null;
   hoveredWard: any | null;
@@ -79,6 +119,7 @@ interface AppState {
   setSelectedCoords: (coords: { lat: number; lng: number } | null) => void;
   setAnalysisResult: (result: AnalysisResult | null) => void;
   setRecommendations: (recs: string | null) => void;
+  setSankalpData: (data: SankalpData | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setHoveredWard: (ward: any | null) => void;
@@ -99,6 +140,7 @@ export const useStore = create<AppState>((set, get) => ({
   selectedCoords: null,
   analysisResult: null,
   recommendations: null,
+  sankalpData: null,
   loading: false,
   error: null,
   hoveredWard: null,
@@ -117,10 +159,11 @@ export const useStore = create<AppState>((set, get) => ({
   setSelectedCoords: (selectedCoords) => set({ selectedCoords }),
   setAnalysisResult: (analysisResult) => set({ analysisResult }),
   setRecommendations: (recommendations) => set({ recommendations }),
+  setSankalpData: (sankalpData) => set({ sankalpData }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setHoveredWard: (hoveredWard) => set({ hoveredWard }),
-  setActiveCity: (activeCity) => set({ activeCity, selectedCoords: null, analysisResult: null, recommendations: null, error: null }),
+  setActiveCity: (activeCity) => set({ activeCity, selectedCoords: null, analysisResult: null, recommendations: null, sankalpData: null, error: null }),
 
   login: async (username, password) => {
     set({ loading: true, error: null });
@@ -148,7 +191,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   logout: () => {
     get().setToken(null);
-    set({ user: null, analysisResult: null, selectedCoords: null, recommendations: null });
+    set({ user: null, analysisResult: null, selectedCoords: null, recommendations: null, sankalpData: null });
   },
 
   fetchProfile: async () => {
@@ -170,7 +213,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   runAnalysis: async (lat, lng) => {
-    set({ loading: true, error: null, analysisResult: null, recommendations: null });
+    set({ loading: true, error: null, analysisResult: null, recommendations: null, sankalpData: null });
     const token = get().token;
     if (!token) {
       set({ error: 'Session expired. Please log in again.', loading: false });
@@ -214,7 +257,10 @@ export const useStore = create<AppState>((set, get) => ({
       });
       if (res.ok) {
         const data = await res.json();
-        set({ recommendations: data.recommendations });
+        set({
+          recommendations: data.recommendations,
+          sankalpData: data.sankalp || null
+        });
       }
     } catch (err) {
       // Quiet fail or handle locally

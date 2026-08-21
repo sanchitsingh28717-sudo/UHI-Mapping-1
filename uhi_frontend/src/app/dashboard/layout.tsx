@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useStore } from '@/store/useStore';
 import { 
   Map, Wind, Droplets, Database, LogOut, User as UserIcon, 
-  Sparkles, ChevronLeft, ChevronRight
+  Sparkles, ChevronLeft, ChevronRight, Cpu
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -58,6 +58,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const role = user?.profile?.role || 'GUEST';
 
   const menuItems = [
+    { name: 'SANKALP Quantum Agent',        path: '/dashboard/sankalp',         icon: Cpu,      roles: ['ADMIN', 'ANALYST', 'PLANNER', 'GUEST'] },
     { name: 'GIS Map Workspace',            path: '/dashboard/map',             icon: Map,      roles: ['ADMIN', 'ANALYST', 'PLANNER', 'GUEST'] },
     { name: 'AI Mitigation Recommendations',path: '/dashboard/recommendations',  icon: Sparkles, roles: ['ADMIN', 'ANALYST', 'PLANNER'] },
     { name: 'Wind Corridors (CFD)',          path: '/dashboard/wind',             icon: Wind,     roles: ['ADMIN', 'ANALYST', 'PLANNER', 'GUEST'] },

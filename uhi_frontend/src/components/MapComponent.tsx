@@ -142,11 +142,45 @@ export default function MapComponent({ panelCollapsed }: MapComponentProps) {
     setSelectedCoords({ lat, lng });
   };
 
-  const layers = {
-    osm: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    satellite: 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-    terrain: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}'
+  const layers: Record<string, { url: string; subdomains: string[]; maxZoom: number; attribution: string }> = {
+    satellite: {
+      url: 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      maxZoom: 20,
+      attribution: '&copy; Google Maps'
+    },
+    osm: {
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      subdomains: ['a', 'b', 'c'],
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    },
+    terrain: {
+      url: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      maxZoom: 20,
+      attribution: '&copy; Google Maps Terrain'
+    }
   };
+
+function interpolateColor(color1: string, color2: string, factor: number): string {
+  const c1 = parseInt(color1.replace('#', ''), 16);
+  const c2 = parseInt(color2.replace('#', ''), 16);
+
+  const r1 = (c1 >> 16) & 255;
+  const g1 = (c1 >> 8) & 255;
+  const b1 = c1 & 255;
+
+  const r2 = (c2 >> 16) & 255;
+  const g2 = (c2 >> 8) & 255;
+  const b2 = c2 & 255;
+
+  const r = Math.round(r1 + factor * (r2 - r1));
+  const g = Math.round(g1 + factor * (g2 - g1));
+  const b = Math.round(b1 + factor * (b2 - b1));
+
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
 
   const getHeatColor = (zone: string) => {
     // Muted, semi-transparent palette — visible but not harsh
@@ -155,32 +189,49 @@ export default function MapComponent({ panelCollapsed }: MapComponentProps) {
     return '#7ab5b4'; // Muted teal
   };
 
-  // Color code wards based on vulnerability classification
+  // Color code wards based on vulnerability classification & demographic blending
   const getWardStyle = useCallback((feature: any) => {
-    const vuln = feature.properties.vulnerability;
-    let fillColor = '#a7cecd';
-    let strokeColor = 'rgba(167, 206, 205, 0.75)';
-
-    if (alpha === 0) {
-      // UHI Risk colour-coding: crisp, distinct fills
-      if (vuln === 'Very High Risk')  { fillColor = '#e06c75'; strokeColor = 'rgba(224,108,117,0.9)'; }
-      else if (vuln === 'High Risk')  { fillColor = '#e5a550'; strokeColor = 'rgba(229,165,80,0.85)'; }
-      else if (vuln === 'Medium Risk'){ fillColor = '#e5c07b'; strokeColor = 'rgba(229,192,123,0.8)'; }
-      else                            { fillColor = '#a7cecd'; strokeColor = 'rgba(167,206,205,0.7)'; }
-    } else {
-      // Demographic vulnerability — sharp purple gradient
-      if (vuln === 'Very High Risk')  { fillColor = '#9b59b6'; strokeColor = 'rgba(155,89,182,0.95)'; }
-      else if (vuln === 'High Risk')  { fillColor = '#a76fc8'; strokeColor = 'rgba(167,111,200,0.9)'; }
-      else if (vuln === 'Medium Risk'){ fillColor = '#c39bd3'; strokeColor = 'rgba(195,155,211,0.85)'; }
-      else                            { fillColor = '#d7bde2'; strokeColor = 'rgba(215,189,226,0.75)'; }
+    const vuln = feature.properties?.vulnerability;
+    
+    // Thermal UHI Risk palette (Teal -> Yellow -> Orange -> Red)
+    let thermalFill = '#7ab5b4';
+    let thermalStroke = '#a7cecd';
+    if (vuln === 'Very High Risk') {
+      thermalFill = '#e06c75';
+      thermalStroke = '#e06c75';
+    } else if (vuln === 'High Risk') {
+      thermalFill = '#e5a550';
+      thermalStroke = '#e5a550';
+    } else if (vuln === 'Medium Risk') {
+      thermalFill = '#e5c07b';
+      thermalStroke = '#e5c07b';
     }
+
+    // Socio-Demographic Vulnerability palette (Light Lavender -> Deep Royal Purple)
+    let demoFill = '#dcd0ea';
+    let demoStroke = '#b39bc8';
+    if (vuln === 'Very High Risk') {
+      demoFill = '#6b5288';
+      demoStroke = '#513b6b';
+    } else if (vuln === 'High Risk') {
+      demoFill = '#8b6da9';
+      demoStroke = '#6f528d';
+    } else if (vuln === 'Medium Risk') {
+      demoFill = '#b39bc8';
+      demoStroke = '#9378ab';
+    }
+
+    const fillColor = interpolateColor(thermalFill, demoFill, alpha);
+    const strokeColor = interpolateColor(thermalStroke, demoStroke, alpha);
+    const fillOpacity = 0.22 + 0.45 * alpha;
+    const weight = 1.2 + 0.8 * alpha;
 
     return {
       color: strokeColor,
       fillColor: fillColor,
-      fillOpacity: alpha === 0 ? 0.20 : 0.55 * alpha,
-      opacity: alpha === 0 ? 0.85 : 0.95,
-      weight: alpha === 0 ? 1.5 : 2,
+      fillOpacity: fillOpacity,
+      opacity: 0.85 + 0.1 * alpha,
+      weight: weight,
       dashArray: undefined
     };
   }, [alpha]);
@@ -384,10 +435,11 @@ export default function MapComponent({ panelCollapsed }: MapComponentProps) {
           zoom={cityZooms[activeCity] || 11.5}
         />
         <TileLayer
-          attribution='&copy; Google Maps / OpenStreetMap contributors'
-          url={layers[mapType]}
-          subdomains={mapType === 'osm' ? ['a', 'b', 'c'] : ['mt0', 'mt1', 'mt2', 'mt3']}
-          maxNativeZoom={19}
+          key={mapType}
+          attribution={layers[mapType].attribution}
+          url={layers[mapType].url}
+          subdomains={layers[mapType].subdomains}
+          maxNativeZoom={layers[mapType].maxZoom}
           maxZoom={20}
           keepBuffer={8}
         />
@@ -395,6 +447,7 @@ export default function MapComponent({ panelCollapsed }: MapComponentProps) {
         {/* Administrative Boundary tracing */}
         {boundaryData && (
           <GeoJSON
+            key={`boundary-${activeCity}`}
             data={boundaryData}
             style={{
               color: '#a7cecd',
@@ -409,6 +462,7 @@ export default function MapComponent({ panelCollapsed }: MapComponentProps) {
         {/* Wards GeoJSON boundaries */}
         {showWards && wardsData && (
           <GeoJSON
+            key={`wards-${activeCity}-${vulnerabilitySlider}-${showWards}`}
             data={wardsData}
             style={getWardStyle}
             onEachFeature={onEachWardFeature}

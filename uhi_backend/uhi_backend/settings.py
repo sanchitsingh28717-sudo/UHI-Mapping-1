@@ -62,7 +62,7 @@ ROOT_URLCONF = 'uhi_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -167,7 +167,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Enable for ease of integration, restrict in pro
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # CSP Headers (OWASP protection)
 SECURE_REFERRER_POLICY = 'same-origin'

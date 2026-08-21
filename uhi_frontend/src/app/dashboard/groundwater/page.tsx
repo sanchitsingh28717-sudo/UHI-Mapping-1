@@ -68,7 +68,7 @@ export default function GroundwaterPage() {
         <div className="space-y-6">
           {/* Groundwater Indicators - Blended Glass */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+            <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
               <div>
                 <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">Recharge Suitability</span>
                 <span className="text-3xl font-black text-slate-100 mt-1 block">
@@ -80,7 +80,7 @@ export default function GroundwaterPage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+            <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
               <div>
                 <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">Soil Permeability Index</span>
                 <span className="text-3xl font-black text-slate-100 mt-1 block">
@@ -92,7 +92,7 @@ export default function GroundwaterPage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm flex flex-col justify-between shadow-lg">
+            <div className="p-5 rounded-2xl cosmic-card flex flex-col justify-between shadow-lg">
               <div>
                 <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider">Terrain Slope</span>
                 <span className="text-3xl font-black text-slate-100 mt-1 block">
@@ -106,7 +106,7 @@ export default function GroundwaterPage() {
           </div>
 
           {/* Infiltration Matrix Grid - Blended Glass */}
-          <div className="p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm space-y-4 shadow-xl">
+          <div className="p-6 rounded-2xl cosmic-card space-y-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
                 <Compass size={16} className="text-[#a7cecd] animate-pulse" />
@@ -157,7 +157,7 @@ export default function GroundwaterPage() {
           </div>
 
           {/* Recharge Recommendations - Blended Glass */}
-          <div className="p-6 rounded-2xl border border-white/10 bg-black/25 backdrop-blur-sm space-y-4 shadow-xl">
+          <div className="p-6 rounded-2xl cosmic-card space-y-4 shadow-xl">
             <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
               <ShieldCheck size={16} className="text-[#a7cecd]" />
               Catchment Planning Directives

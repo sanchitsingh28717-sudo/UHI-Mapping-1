@@ -4,7 +4,8 @@ from .views import (
     MitigationRecommendationsView, ExportPDFReportView,
     DatasetUploadView, DashboardStatsView, SecurityLogsView,
     HeatZonesMapView, WardsBoundaryMapView, AhmedabadBoundaryMapView,
-    AquiferSimulateView, AquiferPlansView, AquiferHotspotsView
+    AquiferSimulateView, AquiferPlansView, AquiferHotspotsView,
+    DownloadDossierView
 )
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     path('maps/wards/', WardsBoundaryMapView.as_view(), name='wards'),
     path('maps/boundary/', AhmedabadBoundaryMapView.as_view(), name='boundary'),
     path('recommend/', MitigationRecommendationsView.as_view(), name='recommend'),
+    path('vault/download/<str:filename>/', DownloadDossierView.as_view(), name='download-dossier'),
     path('reports/export/', ExportPDFReportView.as_view(), name='export-pdf'),
     path('data/upload/', DatasetUploadView.as_view(), name='data-upload'),
     path('dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
