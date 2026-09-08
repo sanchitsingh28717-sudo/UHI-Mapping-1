@@ -1,13 +1,17 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useStore } from '@/store/useStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Wind, ArrowRight, AlertCircle, Compass, Landmark, ArrowUp, Activity } from 'lucide-react';
 
+// Leaflet must not SSR — load the map only on the client
+const WindVectorMap = dynamic(() => import('@/components/WindVectorMap'), { ssr: false });
+
 export default function WindCorridorsPage() {
-  const { selectedCoords, analysisResult, setSelectedCoords, runAnalysis, fetchRecommendations } = useStore();
+  const { selectedCoords, analysisResult, sankalpData, setSelectedCoords, runAnalysis, fetchRecommendations } = useStore();
   const router = useRouter();
 
   const handleCoordinateClick = (latitude: number, longitude: number) => {
@@ -103,46 +107,32 @@ export default function WindCorridorsPage() {
               </div>
             </div>
 
-            {/* 2D Wind Vector Field Grid (CFD Simulation) */}
+            {/* Satellite Wind Vector Map (replaces CSS grid) */}
             <div className="p-6 rounded-2xl cosmic-card space-y-4 shadow-xl">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                   <Compass size={16} className="text-[#a7cecd] animate-spin" />
-                  2D Wind Field Flow Grid (10m Resolution)
+                  Live Wind Field — Satellite View (10m Resolution)
                 </h3>
-                <span className="text-[9px] font-mono text-zinc-500 font-bold uppercase">Grid Size: 100m² Buffer</span>
+                <span className="text-[9px] font-mono text-zinc-500 font-bold uppercase">
+                  Esri World Imagery · SANKALP CFD-Net
+                </span>
               </div>
 
-              <div className="grid grid-cols-10 gap-1.5 p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10 aspect-square md:aspect-auto max-w-lg mx-auto shadow-inner">
-                {analysisResult.wind_corridor.wind_vector_grid?.map((vec: any, idx: number) => {
-                  // Calculate opacity based on wind speed (faster = brighter)
-                  const opacity = Math.min(Math.max(vec.speed / 4.5, 0.25), 1.0);
-                  const rotation = vec.angle;
-                  return (
-                    <div 
-                      key={idx} 
-                      className="aspect-square flex items-center justify-center relative group cursor-pointer hover:bg-white/5 rounded transition-colors"
-                      onClick={() => handleCoordinateClick(vec.latitude, vec.longitude)}
-                      title={`Coords: (${vec.latitude.toFixed(4)}, ${vec.longitude.toFixed(4)})\nSpeed: ${vec.speed} m/s\nAngle: ${vec.angle}°\nClick to view on Map Workspace`}
-                    >
-                      <ArrowUp 
-                        size={18} 
-                        className="text-[#a7cecd] transition-all duration-300 transform group-hover:scale-125"
-                        style={{ 
-                          transform: `rotate(${rotation}deg)`, 
-                          opacity: opacity 
-                        }} 
-                      />
-                      {/* Tiny speed numeric overlays on hover */}
-                      <span className="absolute hidden group-hover:block z-50 bg-black/80 backdrop-blur-sm text-zinc-200 font-mono text-[8px] p-1 rounded -top-8 border border-white/15 pointer-events-none whitespace-nowrap shadow-md">
-                        {vec.speed} m/s
-                      </span>
-                    </div>
-                  );
-                })}
+              {/* Map container — fixed height so Leaflet renders correctly */}
+              <div className="rounded-xl overflow-hidden border border-white/10 shadow-inner" style={{ height: '520px' }}>
+                <WindVectorMap
+                  center={selectedCoords}
+                  windGrid={analysisResult.wind_corridor.wind_vector_grid ?? []}
+                  sankalpData={sankalpData}
+                  obstructionStatus={analysisResult.wind_corridor.obstruction_status}
+                  ventilationPct={analysisResult.wind_corridor.ventilation_efficiency_pct}
+                />
               </div>
+
               <p className="text-[10px] text-zinc-500 leading-relaxed text-center italic">
-                *Monsoon wind flow vectors simulated using localized potential solver over elevations (DEM) and building drag (LULC).*
+                * Wind vectors geo-positioned over real satellite imagery. Colour: cyan = slow, yellow = moderate, red = fast.
+                Hover any arrow for exact speed &amp; bearing. SANKALP agent overlay shows optimized wind targets.
               </p>
             </div>
 

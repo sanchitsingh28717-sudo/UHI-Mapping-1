@@ -27,7 +27,20 @@ export default function GroundwaterPage() {
   };
 
   return (
-    <div className="p-6 md:p-8 max-w-4xl mx-auto space-y-6 min-h-full">
+    <div className="relative min-h-full overflow-hidden">
+      {/* ── Background video ── */}
+      <video
+        autoPlay loop muted playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        style={{ zIndex: 0 }}
+      >
+        <source src="/groundwater-bg.mp4" type="video/mp4" />
+      </video>
+      {/* Dark overlay so content stays readable */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1, background: 'linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.72) 100%)' }} />
+
+      {/* Content layer */}
+      <div className="relative p-6 md:p-8 max-w-4xl mx-auto space-y-6 min-h-full" style={{ zIndex: 2 }}>
       {/* Page Header Box - Seamless Blended Glass */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl cosmic-card border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all">
         <div className="flex items-center gap-3.5">
@@ -168,6 +181,7 @@ export default function GroundwaterPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
