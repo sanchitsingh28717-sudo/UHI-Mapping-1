@@ -12,6 +12,7 @@ export default function HomePage() {
   const scroll2Ref       = useRef<HTMLDivElement>(null);
   const subtitleRef      = useRef<HTMLParagraphElement>(null);
   const ctaSlotRef       = useRef<HTMLDivElement>(null);
+  const scroll3Ref       = useRef<HTMLDivElement>(null);
   const featuresLabelRef = useRef<HTMLParagraphElement>(null);
   const gsapReadyRef     = useRef(false);
 
@@ -41,6 +42,7 @@ export default function HomePage() {
     const scroll2Content = scroll2Ref.current!;
     const subtitle       = subtitleRef.current!;
     const ctaSlot        = ctaSlotRef.current!;
+    const scroll3Content = scroll3Ref.current!;
     const featuresLabel  = featuresLabelRef.current!;
     const cards          = Array.from(document.querySelectorAll<HTMLElement>('.feature-card'));
 
@@ -200,6 +202,22 @@ export default function HomePage() {
       cardOutTimers.push(finalT);
     }
 
+    /* ── Scroll 3 show / hide ── */
+    function showScroll3() {
+      introLogo.style.opacity            = '0';
+      scroll3Content.style.opacity       = '1';
+      scroll3Content.style.pointerEvents = 'auto';
+      /* play the animation video from start */
+      const animVid = document.getElementById('scroll3-video') as HTMLVideoElement | null;
+      if (animVid) { animVid.currentTime = 0; animVid.play().catch(() => {}); }
+    }
+    function hideScroll3() {
+      scroll3Content.style.opacity       = '0';
+      scroll3Content.style.pointerEvents = 'none';
+      const animVid = document.getElementById('scroll3-video') as HTMLVideoElement | null;
+      if (animVid) animVid.pause();
+    }
+
     /* ── Video segment timing ── */
     const FWD: [number, number][] = [[0, 4], [4, 8], [8, 13], [13, 17]];
     const TOTAL = 17.35;
@@ -246,10 +264,10 @@ export default function HomePage() {
       /* current = segment index about to play
          1 = 4s→8s   → show scroll1
          2 = 8s→13s  → show scroll2
-         3 = 13s→17s → hide both               */
-      if (current === 1)      { showScroll1(); hideScroll2(true); }
-      else if (current === 2) { hideScroll1(false); showScroll2(); }
-      else                    { hideScroll1(false); hideScroll2(true); }
+         3 = 13s→17s → show scroll3            */
+      if (current === 1)      { showScroll1(); hideScroll2(true); hideScroll3(); }
+      else if (current === 2) { hideScroll1(false); showScroll2(); hideScroll3(); }
+      else                    { hideScroll1(false); hideScroll2(true); showScroll3(); }
 
       if (Math.abs(video.currentTime - start) > 0.3) video.currentTime = start;
       video.playbackRate = 1;
@@ -270,10 +288,12 @@ export default function HomePage() {
       /* kick off card-out animation immediately when reverse starts from scroll2 */
       if (current === 3) {
         hideScroll2(false);
-        hideScroll1(false); // ensure scroll1 is hidden so it fades in cleanly at end
+        hideScroll1(false);
+        hideScroll3();
       }
-      /* coming back from segment 4 (post-scroll2) — scroll2 is already hidden */
+      /* coming back from segment 4 (scroll3 visible) */
       if (current === 4) {
+        hideScroll3();
         hideScroll2(true);
         hideScroll1(false);
       }
@@ -293,9 +313,10 @@ export default function HomePage() {
              2 = scroll1 (title + SIGN IN/UP)
              3 = scroll2 (feature cards)
              4 = after scroll2 (blank)            */
-          if (current === 1)      { hideScroll1(true);  hideScroll2(true); }
-          else if (current === 2) { showScroll1();       hideScroll2(true); }
-          else if (current === 3) { hideScroll1(false);  showScroll2(); }
+          if (current === 1)      { hideScroll1(true);  hideScroll2(true); hideScroll3(); }
+          else if (current === 2) { showScroll1();       hideScroll2(true); hideScroll3(); }
+          else if (current === 3) { hideScroll1(false);  showScroll2();     hideScroll3(); }
+          else if (current === 4) { hideScroll1(false);  hideScroll2(true); showScroll3(); }
 
           videoRev.pause();
           video.currentTime = fwdLanding;
@@ -498,6 +519,40 @@ export default function HomePage() {
           font-size: clamp(13px,1.25vw,17px); color: rgba(200,230,222,0.72);
           line-height: 1.75; letter-spacing: 0.01em; margin-top: auto;
         }
+        /* ── Scroll 3 container ── */
+        #scroll3-content {
+          position: fixed; inset: 0; z-index: 2;
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          padding: 60px 5vw 40px;
+          pointer-events: none; opacity: 0;
+          transition: opacity 0.6s ease;
+        }
+
+        /* Liquid glass card */
+        .scroll3-glass {
+          position: relative;
+          width: 88%;
+          max-width: 1100px;
+          border-radius: 28px;
+          overflow: hidden;
+          background: rgba(10, 20, 30, 0.35);
+          backdrop-filter: blur(20px) saturate(1.4);
+          -webkit-backdrop-filter: blur(20px) saturate(1.4);
+          border: 1px solid rgba(255,255,255,0.18);
+          box-shadow:
+            0 8px 40px rgba(0,0,0,0.45),
+            inset 0 1px 0 rgba(255,255,255,0.22),
+            inset 0 -1px 0 rgba(255,255,255,0.06);
+        }
+
+        /* top highlight rim */
+        .scroll3-glass::before {
+          content: '';
+          position: absolute; top: 0; left: 0; right: 0; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+          z-index: 2;
+        }
+
       `}</style>
 
       {/* ── FIXED TOP-RIGHT NAV — visible on all 3 scroll states ── */}
@@ -649,6 +704,29 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* ── Scroll 3 (13s → 17s) — animation video in liquid glass ── */}
+      <div id="scroll3-content" ref={scroll3Ref}>
+
+        {/* Top logo */}
+        <div style={{ position:'absolute', top:36, left:'50%', transform:'translateX(-50%)', pointerEvents:'none', whiteSpace:'nowrap' }}>
+          <span style={{ fontFamily:"'General Sans',sans-serif", fontWeight:500, fontSize:36, letterSpacing:'0.45em', color:'#fff', textTransform:'uppercase', paddingRight:'0.45em' }}>SANKALP</span>
+        </div>
+
+        {/* Liquid glass video card */}
+        <div className="scroll3-glass">
+          <video
+            id="scroll3-video"
+            muted
+            playsInline
+            preload="auto"
+            style={{ display:'block', width:'100%', height:'auto', borderRadius:'28px', mixBlendMode:'multiply' }}
+          >
+            <source src="/scroll3-anim.mp4" type="video/mp4" />
+          </video>
+        </div>
+
       </div>
     </>
   );

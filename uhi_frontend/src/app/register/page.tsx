@@ -212,16 +212,53 @@ export default function RegisterPage() {
             {/* Header */}
             <div style={{ display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'1.75rem' }}>
               <div style={{ marginBottom:'0.75rem' }}>
-                <svg width="52" height="52" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="28" cy="28" r="27" stroke="#a7cecd" strokeWidth="1.5" strokeDasharray="6 3" opacity="0.6"/>
-                  <circle cx="28" cy="28" r="20" stroke="#a7cecd" strokeWidth="1" opacity="0.3"/>
-                  <rect x="25" y="12" width="6" height="22" rx="3" fill="#a7cecd" opacity="0.9"/>
-                  <circle cx="28" cy="36" r="6" fill="#a7cecd"/>
-                  <rect x="26.5" y="22" width="3" height="14" rx="1.5" fill="rgba(0,0,0,0.35)"/>
-                  <line x1="31" y1="18" x2="33.5" y2="18" stroke="#a7cecd" strokeWidth="1.2" strokeLinecap="round"/>
-                  <line x1="31" y1="22" x2="33.5" y2="22" stroke="#a7cecd" strokeWidth="1.2" strokeLinecap="round"/>
-                  <line x1="31" y1="26" x2="34"   y2="26" stroke="#a7cecd" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="31" y1="30" x2="33.5" y2="30" stroke="#a7cecd" strokeWidth="1.2" strokeLinecap="round"/>
+                <svg width="90" height="90" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="triGradL2" x1="60" y1="60" x2="100" y2="160" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#1a8a8a"/>
+                      <stop offset="100%" stopColor="#0d5f6e"/>
+                    </linearGradient>
+                    <linearGradient id="triGradR2" x1="100" y1="60" x2="140" y2="160" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#2ab5b5"/>
+                      <stop offset="100%" stopColor="#1a8a8a"/>
+                    </linearGradient>
+                    <linearGradient id="waveGrad2" x1="40" y1="130" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#1a9aaa"/>
+                      <stop offset="100%" stopColor="#2ecfcf"/>
+                    </linearGradient>
+                    <linearGradient id="satGrad2" x1="120" y1="10" x2="175" y2="55" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#1a9aaa"/>
+                      <stop offset="100%" stopColor="#0d6e7a"/>
+                    </linearGradient>
+                  </defs>
+                  {/* Left face */}
+                  <path d="M100 55 L62 148 L100 128 Z" fill="url(#triGradL2)"/>
+                  {/* Right face */}
+                  <path d="M100 55 L100 128 L138 148 Z" fill="url(#triGradR2)"/>
+                  {/* White divider */}
+                  <path d="M100 58 L100 126" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.9"/>
+                  {/* Wave base */}
+                  <path d="M42 148 Q65 138 80 145 Q100 155 120 145 Q135 138 158 148"
+                    stroke="url(#waveGrad2)" strokeWidth="10" strokeLinecap="round" fill="none"/>
+                  {/* Orbital arc */}
+                  <path d="M55 155 Q60 80 148 28"
+                    stroke="#2ab5b5" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.9"/>
+                  {/* Dot on arc */}
+                  <circle cx="90" cy="88" r="3.5" fill="#2ab5b5" opacity="0.9"/>
+                  {/* Satellite */}
+                  <g transform="translate(130, 12) rotate(-35, 25, 25)">
+                    <rect x="16" y="16" width="20" height="16" rx="2" fill="url(#satGrad2)"/>
+                    <rect x="2" y="18" width="12" height="12" rx="1" fill="#1a8a8a"/>
+                    <line x1="4" y1="18" x2="4" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <line x1="7" y1="18" x2="7" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <line x1="10" y1="18" x2="10" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <rect x="38" y="18" width="12" height="12" rx="1" fill="#1a8a8a"/>
+                    <line x1="40" y1="18" x2="40" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <line x1="43" y1="18" x2="43" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <line x1="46" y1="18" x2="46" y2="30" stroke="#0d5f6e" strokeWidth="0.8"/>
+                    <line x1="26" y1="16" x2="26" y2="10" stroke="#2ab5b5" strokeWidth="1.5" strokeLinecap="round"/>
+                    <circle cx="26" cy="9" r="2" fill="#2ab5b5"/>
+                  </g>
                 </svg>
               </div>
               <h1 style={{ fontFamily:'"General Sans",sans-serif', fontWeight:600, fontSize:'1.25rem', letterSpacing:'0.04em', color:'#fff', textAlign:'center' }}>Create Account</h1>
