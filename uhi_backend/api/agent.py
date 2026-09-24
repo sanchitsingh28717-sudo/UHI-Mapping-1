@@ -85,19 +85,16 @@ class SankalpQuadModelSuite:
             return False, 0.0
 
     def predict_wind_speed(self, wind_6d: list[float]) -> float:
+        """
+        Contract: [Base_Met_Speed_m_s, Incoming_Heading_Deg, Plan_Density_LambdaP, Frontal_Block_LambdaF, Sky_View_Factor, Building_Height]
+        """
         if self.sess_wind is None:
             return 2.5
         try:
             input_name = self.sess_wind.get_inputs()[0].name
             raw = self.sess_wind.run(None, {input_name: np.array([wind_6d], dtype=np.float32)})
             val = float(raw[0][0][0])
-            # Handle potential model saturation edge-cases
-            if val == 0.17:
-                h = wind_6d[0]
-                dem = wind_6d[1]
-                base_w = wind_6d[2]
-                val = base_w * (1.2 + (h / 35.0)) * (1.0 - wind_6d[4])
-            return float(val)
+            return float(max(0.1, val))
         except Exception:
             return 2.5
 
@@ -293,19 +290,21 @@ class OmniSentinelAgent:
         while iterations < max_iterations:
             iterations += 1
             
-            # 1. Structural Wind Simulation
+            # 1. Structural Wind Simulation (6-D: [base_wind, wind_dir, lp, lf, svf, height])
             lp = max(0.05, 0.50 - (sim_h / 120.0))
             lf = max(0.08, 0.55 - (sim_h / 110.0))
-            wind_vector = [sim_h, data["dem"], data["initial_wind"], 235.0, lp, lf]
+            svf = max(0.12, 1.0 - (sim_h / 140.0))
+            wind_vector = [data["initial_wind"], 235.0, lp, lf, svf, sim_h]
             pred_wind = self.quad_suite.predict_wind_speed(wind_vector)
             
-            # 2. UHI Hotspot Evaluation
+            # 2. UHI Hotspot Evaluation (10-D: [LST, DEM, LULC, NDBI, NDVI, NDWI, NDBI_Focal, NDVI_Focal, USI, USI_Focal])
             sim_ndbi = max(-0.4, data["ndbi"] - (iterations * 0.08))
             sim_ndvi = min(0.9, data["ndvi"] + (iterations * 0.06))
+            sim_usi = sim_ndbi - sim_ndvi
             
             spatial_10d = [
-                float(iterations + 100), data["dem"], current_lst, data["lulc"],
-                sim_ndbi, sim_ndbi, sim_ndvi, sim_ndvi, data["ndwi"], sim_h
+                current_lst, data["dem"], data["lulc"],
+                sim_ndbi, sim_ndvi, data["ndwi"], sim_ndbi, sim_ndvi, sim_usi, sim_usi
             ]
             is_hotspot, hotspot_prob = self.quad_suite.predict_uhi_status(spatial_10d, threshold=0.40)
             

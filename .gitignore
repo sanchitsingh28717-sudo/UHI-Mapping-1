@@ -77,6 +77,8 @@ yarn-error.log*
 # Large data files — exceed GitHub 100MB limit
 uhi_backend/knowledge_base/SANKALP_v4_Expanded_Wind_Data.csv
 uhi_backend/knowledge_base/SANKALP_v4_Max_Density_Data.csv
+uhi_backend/training_data/SANKALP_v4_Expanded_Wind_Data.csv
+uhi_backend/training_data/SANKALP_v4_Max_Density_Data.csv
 # Generated evidence vault PDFs (runtime artifacts)
 uhi_backend/evidence_vault/*.pdf
 # Large public video assets
@@ -88,3 +90,7 @@ uhi_backend/training_data/live_telemetry_feed.csv
 uhi_frontend/public/*.mp4
 uhi_frontend/public/*.mov
 uhi_frontend/public/*.webm
+
+# Cache files (runtime artifacts)
+uhi_backend/cache/
+uhi_backend/cache/*.json

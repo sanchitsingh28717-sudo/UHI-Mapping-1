@@ -163,6 +163,7 @@ SIMPLE_JWT = {
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # Enable for ease of integration, restrict in production
+APPEND_SLASH = False
 
 # Security settings
 SECURE_BROWSER_XSS_FILTER = True

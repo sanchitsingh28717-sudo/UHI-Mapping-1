@@ -49,7 +49,7 @@ def generate_mitigation_recommendations(lat, lon, env_data, analysis_results):
         try:
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
+            response = model.generate_content(prompt, request_options={"timeout": 5.0})
             return response.text
         except Exception as e:
             # Fall back to localized template on API failure

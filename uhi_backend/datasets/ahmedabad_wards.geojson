@@ -2027,9 +2027,9 @@
         "area_km2": 33.38,
         "population": 105000,
         "density_per_km2": 3145,
-        "lst_avg_celsius": 18.62,
-        "ndvi_avg": 0.144,
-        "risk_score": 52.0,
+        "lst_avg_celsius": 35.5,
+        "ndvi_avg": 0.524,
+        "risk_score": 31.1,
         "vulnerability": "Medium Risk",
         "slum_density": 0.1,
         "outdoor_labor_index": 0.27,
@@ -2038,7 +2038,15 @@
         "water_scarcity_index": 0.24,
         "tree_canopy_ratio": 0.22,
         "public_water_access": 0.76,
-        "cool_roofs_ratio": 0.28
+        "cool_roofs_ratio": 0.28,
+        "ndbi_avg": -0.184,
+        "ndwi_avg": -0.535,
+        "dem_m": 42,
+        "lulc": 40,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 800
       }
     },
     {
@@ -3132,10 +3140,10 @@
         "area_km2": 12.26,
         "population": 140000,
         "density_per_km2": 11422,
-        "lst_avg_celsius": 19.83,
-        "ndvi_avg": 0.136,
-        "risk_score": 47.6,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 35.4,
+        "ndvi_avg": 0.083,
+        "risk_score": 58.6,
+        "vulnerability": "High Risk",
         "slum_density": 0.16,
         "outdoor_labor_index": 0.09,
         "elderly_ratio": 0.098,
@@ -3143,7 +3151,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.2,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.27
+        "cool_roofs_ratio": 0.27,
+        "ndbi_avg": -0.015,
+        "ndwi_avg": -0.151,
+        "dem_m": 41,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.8,
+        "pop_density": 18500
       }
     },
     {
@@ -4687,9 +4703,9 @@
         "area_km2": 52.21,
         "population": 120000,
         "density_per_km2": 2298,
-        "lst_avg_celsius": 22.01,
-        "ndvi_avg": 0.17,
-        "risk_score": 46.8,
+        "lst_avg_celsius": 37.9,
+        "ndvi_avg": 0.259,
+        "risk_score": 46.1,
         "vulnerability": "Medium Risk",
         "slum_density": 0.08,
         "outdoor_labor_index": 0.17,
@@ -4698,7 +4714,15 @@
         "water_scarcity_index": 0.19,
         "tree_canopy_ratio": 0.26,
         "public_water_access": 0.81,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": 0.117,
+        "ndwi_avg": -0.366,
+        "dem_m": 38,
+        "lulc": 40,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 38.9,
+        "pop_density": 800
       }
     },
     {
@@ -5092,9 +5116,9 @@
         "area_km2": 4.44,
         "population": 112000,
         "density_per_km2": 25238,
-        "lst_avg_celsius": 23.19,
-        "ndvi_avg": 0.075,
-        "risk_score": 57.1,
+        "lst_avg_celsius": 36.8,
+        "ndvi_avg": 0.123,
+        "risk_score": 63.6,
         "vulnerability": "High Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.16,
@@ -5103,7 +5127,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.31
+        "cool_roofs_ratio": 0.31,
+        "ndbi_avg": 0.106,
+        "ndwi_avg": -0.205,
+        "dem_m": 46,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 73.3,
+        "pop_density": 18500
       }
     },
     {
@@ -5767,10 +5799,10 @@
         "area_km2": 3.89,
         "population": 95000,
         "density_per_km2": 24414,
-        "lst_avg_celsius": 14.11,
-        "ndvi_avg": 0.068,
-        "risk_score": 49.9,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 39.2,
+        "ndvi_avg": 0.102,
+        "risk_score": 63.6,
+        "vulnerability": "High Risk",
         "slum_density": 0.07,
         "outdoor_labor_index": 0.22,
         "elderly_ratio": 0.088,
@@ -5778,7 +5810,15 @@
         "water_scarcity_index": 0.24,
         "tree_canopy_ratio": 0.1,
         "public_water_access": 0.76,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.009,
+        "ndwi_avg": -0.181,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -6077,10 +6117,10 @@
         "area_km2": 2.11,
         "population": 115000,
         "density_per_km2": 54620,
-        "lst_avg_celsius": 16.29,
-        "ndvi_avg": 0.047,
-        "risk_score": 47.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.6,
+        "ndvi_avg": 0.079,
+        "risk_score": 62.3,
+        "vulnerability": "High Risk",
         "slum_density": 0.08,
         "outdoor_labor_index": 0.07,
         "elderly_ratio": 0.114,
@@ -6088,7 +6128,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.07,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.055,
+        "ndwi_avg": -0.151,
+        "dem_m": 48,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 91.6,
+        "pop_density": 18500
       }
     },
     {
@@ -6677,10 +6725,10 @@
         "area_km2": 3.6,
         "population": 105000,
         "density_per_km2": 29151,
-        "lst_avg_celsius": 12.59,
-        "ndvi_avg": 0.04,
-        "risk_score": 51.7,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.7,
+        "ndvi_avg": 0.128,
+        "risk_score": 62.9,
+        "vulnerability": "High Risk",
         "slum_density": 0.15,
         "outdoor_labor_index": 0.17,
         "elderly_ratio": 0.068,
@@ -6688,7 +6736,15 @@
         "water_scarcity_index": 0.28,
         "tree_canopy_ratio": 0.06,
         "public_water_access": 0.72,
-        "cool_roofs_ratio": 0.27
+        "cool_roofs_ratio": 0.27,
+        "ndbi_avg": 0.088,
+        "ndwi_avg": -0.252,
+        "dem_m": 49,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 36.6,
+        "pop_density": 18500
       }
     },
     {
@@ -7887,10 +7943,10 @@
         "area_km2": 14.62,
         "population": 130000,
         "density_per_km2": 8889,
-        "lst_avg_celsius": 21.3,
-        "ndvi_avg": 0.148,
-        "risk_score": 44.8,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 39.3,
+        "ndvi_avg": 0.102,
+        "risk_score": 63.9,
+        "vulnerability": "High Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.08,
         "elderly_ratio": 0.089,
@@ -7898,7 +7954,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.22,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.003,
+        "ndwi_avg": -0.19,
+        "dem_m": 47,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -8882,10 +8946,10 @@
         "area_km2": 5.93,
         "population": 120000,
         "density_per_km2": 20230,
-        "lst_avg_celsius": 17.54,
-        "ndvi_avg": 0.07,
-        "risk_score": 48.3,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.2,
+        "ndvi_avg": 0.122,
+        "risk_score": 61.8,
+        "vulnerability": "High Risk",
         "slum_density": 0.08,
         "outdoor_labor_index": 0.12,
         "elderly_ratio": 0.102,
@@ -8893,7 +8957,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.07,
+        "ndwi_avg": -0.226,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 65.3,
+        "pop_density": 18500
       }
     },
     {
@@ -9557,10 +9629,10 @@
         "area_km2": 3.41,
         "population": 135000,
         "density_per_km2": 39589,
-        "lst_avg_celsius": 17.09,
-        "ndvi_avg": 0.082,
-        "risk_score": 43.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 33.1,
+        "ndvi_avg": 0.194,
+        "risk_score": 56.2,
+        "vulnerability": "High Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.03,
         "elderly_ratio": 0.095,
@@ -9568,7 +9640,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.12,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.051,
+        "ndwi_avg": -0.274,
+        "dem_m": 50,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 93.2,
+        "pop_density": 18500
       }
     },
     {
@@ -10132,10 +10212,10 @@
         "area_km2": 3.52,
         "population": 120000,
         "density_per_km2": 34135,
-        "lst_avg_celsius": 17.87,
-        "ndvi_avg": 0.097,
-        "risk_score": 54.7,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 35.7,
+        "ndvi_avg": 0.228,
+        "risk_score": 59.7,
+        "vulnerability": "High Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.28,
         "elderly_ratio": 0.081,
@@ -10143,7 +10223,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.15,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": 0.064,
+        "ndwi_avg": -0.299,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 81.4,
+        "pop_density": 18500
       }
     },
     {
@@ -10502,9 +10590,9 @@
         "area_km2": 4.93,
         "population": 98000,
         "density_per_km2": 19871,
-        "lst_avg_celsius": 22.58,
-        "ndvi_avg": 0.104,
-        "risk_score": 57.6,
+        "lst_avg_celsius": 35.6,
+        "ndvi_avg": 0.17,
+        "risk_score": 59.1,
         "vulnerability": "High Risk",
         "slum_density": 0.03,
         "outdoor_labor_index": 0.24,
@@ -10513,7 +10601,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.16,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.027,
+        "ndwi_avg": -0.215,
+        "dem_m": 51,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 98.9,
+        "pop_density": 18500
       }
     },
     {
@@ -11027,9 +11123,9 @@
         "area_km2": 3.85,
         "population": 125000,
         "density_per_km2": 32497,
-        "lst_avg_celsius": 20.11,
-        "ndvi_avg": 0.108,
-        "risk_score": 59.3,
+        "lst_avg_celsius": 35.6,
+        "ndvi_avg": 0.23,
+        "risk_score": 60.4,
         "vulnerability": "High Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.28,
@@ -11038,7 +11134,15 @@
         "water_scarcity_index": 0.24,
         "tree_canopy_ratio": 0.16,
         "public_water_access": 0.76,
-        "cool_roofs_ratio": 0.3
+        "cool_roofs_ratio": 0.3,
+        "ndbi_avg": 0.093,
+        "ndwi_avg": -0.252,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 39.6,
+        "pop_density": 18500
       }
     },
     {
@@ -11517,10 +11621,10 @@
         "area_km2": 11.09,
         "population": 130000,
         "density_per_km2": 11719,
-        "lst_avg_celsius": 18.67,
-        "ndvi_avg": 0.11,
-        "risk_score": 38.6,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 41.6,
+        "ndvi_avg": 0.117,
+        "risk_score": 71.4,
+        "vulnerability": "Very High Risk",
         "slum_density": 0.0,
         "outdoor_labor_index": 0.01,
         "elderly_ratio": 0.098,
@@ -11528,7 +11632,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.17,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.151,
+        "ndwi_avg": -0.181,
+        "dem_m": 43,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "High Heat Zone",
+        "confidence": 57.7,
+        "pop_density": 18500
       }
     },
     {
@@ -12677,9 +12789,9 @@
         "area_km2": 27.7,
         "population": 115000,
         "density_per_km2": 4151,
-        "lst_avg_celsius": 15.3,
-        "ndvi_avg": 0.158,
-        "risk_score": 39.2,
+        "lst_avg_celsius": 33.4,
+        "ndvi_avg": 0.317,
+        "risk_score": 34.1,
         "vulnerability": "Medium Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.15,
@@ -12688,7 +12800,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.24,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.041,
+        "ndwi_avg": -0.378,
+        "dem_m": 41,
+        "lulc": 10,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.9,
+        "pop_density": 50
       }
     },
     {
@@ -13582,9 +13702,9 @@
         "area_km2": 25.63,
         "population": 120000,
         "density_per_km2": 4681,
-        "lst_avg_celsius": 22.56,
-        "ndvi_avg": 0.195,
-        "risk_score": 51.4,
+        "lst_avg_celsius": 33.8,
+        "ndvi_avg": 0.301,
+        "risk_score": 36.4,
         "vulnerability": "Medium Risk",
         "slum_density": 0.02,
         "outdoor_labor_index": 0.29,
@@ -13593,7 +13713,15 @@
         "water_scarcity_index": 0.21,
         "tree_canopy_ratio": 0.29,
         "public_water_access": 0.79,
-        "cool_roofs_ratio": 0.34
+        "cool_roofs_ratio": 0.34,
+        "ndbi_avg": -0.013,
+        "ndwi_avg": -0.362,
+        "dem_m": 36,
+        "lulc": 40,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 800
       }
     },
     {
@@ -14022,9 +14150,9 @@
         "area_km2": 3.15,
         "population": 110000,
         "density_per_km2": 34970,
-        "lst_avg_celsius": 16.37,
-        "ndvi_avg": 0.071,
-        "risk_score": 56.9,
+        "lst_avg_celsius": 37.1,
+        "ndvi_avg": 0.139,
+        "risk_score": 60.9,
         "vulnerability": "High Risk",
         "slum_density": 0.07,
         "outdoor_labor_index": 0.3,
@@ -14033,7 +14161,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.006,
+        "ndwi_avg": -0.174,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -14417,10 +14553,10 @@
         "area_km2": 6.05,
         "population": 74000,
         "density_per_km2": 12234,
-        "lst_avg_celsius": 18.48,
-        "ndvi_avg": 0.117,
-        "risk_score": 42.7,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.5,
+        "ndvi_avg": 0.214,
+        "risk_score": 59.7,
+        "vulnerability": "High Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.09,
         "elderly_ratio": 0.081,
@@ -14428,7 +14564,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.18,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.025,
+        "ndwi_avg": -0.291,
+        "dem_m": 42,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.1,
+        "pop_density": 18500
       }
     },
     {
@@ -14782,10 +14926,10 @@
         "area_km2": 6.07,
         "population": 78000,
         "density_per_km2": 12857,
-        "lst_avg_celsius": 21.2,
-        "ndvi_avg": 0.1,
-        "risk_score": 54.2,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 35.3,
+        "ndvi_avg": 0.187,
+        "risk_score": 59.9,
+        "vulnerability": "High Risk",
         "slum_density": 0.09,
         "outdoor_labor_index": 0.17,
         "elderly_ratio": 0.082,
@@ -14793,7 +14937,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.15,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": 0.073,
+        "ndwi_avg": -0.244,
+        "dem_m": 51,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 38.2,
+        "pop_density": 18500
       }
     },
     {
@@ -15542,10 +15694,10 @@
         "area_km2": 3.05,
         "population": 115000,
         "density_per_km2": 37666,
-        "lst_avg_celsius": 18.24,
-        "ndvi_avg": 0.089,
-        "risk_score": 52.2,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.3,
+        "ndvi_avg": 0.182,
+        "risk_score": 56.8,
+        "vulnerability": "High Risk",
         "slum_density": 0.09,
         "outdoor_labor_index": 0.2,
         "elderly_ratio": 0.092,
@@ -15553,7 +15705,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.13,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.012,
+        "ndwi_avg": -0.23,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -16377,10 +16537,10 @@
         "area_km2": 3.55,
         "population": 90000,
         "density_per_km2": 25381,
-        "lst_avg_celsius": 21.1,
-        "ndvi_avg": 0.074,
-        "risk_score": 49.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.5,
+        "ndvi_avg": 0.056,
+        "risk_score": 62.5,
+        "vulnerability": "High Risk",
         "slum_density": 0.0,
         "outdoor_labor_index": 0.09,
         "elderly_ratio": 0.086,
@@ -16388,7 +16548,15 @@
         "water_scarcity_index": 0.17,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.83,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.057,
+        "ndwi_avg": -0.137,
+        "dem_m": 57,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 92.7,
+        "pop_density": 18500
       }
     },
     {
@@ -16842,9 +17010,9 @@
         "area_km2": 3.32,
         "population": 105000,
         "density_per_km2": 31634,
-        "lst_avg_celsius": 18.95,
-        "ndvi_avg": 0.101,
-        "risk_score": 47.3,
+        "lst_avg_celsius": 33.2,
+        "ndvi_avg": 0.503,
+        "risk_score": 30.1,
         "vulnerability": "Medium Risk",
         "slum_density": 0.08,
         "outdoor_labor_index": 0.08,
@@ -16853,7 +17021,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.15,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.092,
+        "ndwi_avg": -0.556,
+        "dem_m": 55,
+        "lulc": 10,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 50
       }
     },
     {
@@ -17137,8 +17313,8 @@
         "area_km2": 2.91,
         "population": 145000,
         "density_per_km2": 49845,
-        "lst_avg_celsius": 23.46,
-        "ndvi_avg": 0.114,
+        "lst_avg_celsius": 33.8,
+        "ndvi_avg": 0.104,
         "risk_score": 58.6,
         "vulnerability": "High Risk",
         "slum_density": 0.14,
@@ -17148,7 +17324,15 @@
         "water_scarcity_index": 0.28,
         "tree_canopy_ratio": 0.17,
         "public_water_access": 0.72,
-        "cool_roofs_ratio": 0.3
+        "cool_roofs_ratio": 0.3,
+        "ndbi_avg": 0.067,
+        "ndwi_avg": -0.16,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 40.0,
+        "pop_density": 18500
       }
     },
     {
@@ -17717,10 +17901,10 @@
         "area_km2": 4.06,
         "population": 110000,
         "density_per_km2": 27075,
-        "lst_avg_celsius": 12.9,
-        "ndvi_avg": 0.047,
-        "risk_score": 47.9,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 35.1,
+        "ndvi_avg": 0.068,
+        "risk_score": 58.6,
+        "vulnerability": "High Risk",
         "slum_density": 0.14,
         "outdoor_labor_index": 0.09,
         "elderly_ratio": 0.119,
@@ -17728,7 +17912,15 @@
         "water_scarcity_index": 0.27,
         "tree_canopy_ratio": 0.07,
         "public_water_access": 0.73,
-        "cool_roofs_ratio": 0.28
+        "cool_roofs_ratio": 0.28,
+        "ndbi_avg": -0.003,
+        "ndwi_avg": -0.133,
+        "dem_m": 53,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -19087,9 +19279,9 @@
         "area_km2": 12.47,
         "population": 125000,
         "density_per_km2": 10024,
-        "lst_avg_celsius": 20.86,
-        "ndvi_avg": 0.096,
-        "risk_score": 58.7,
+        "lst_avg_celsius": 38.1,
+        "ndvi_avg": 0.053,
+        "risk_score": 65.5,
         "vulnerability": "High Risk",
         "slum_density": 0.1,
         "outdoor_labor_index": 0.25,
@@ -19098,7 +19290,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.14,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": 0.085,
+        "ndwi_avg": -0.155,
+        "dem_m": 56,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "High Heat Zone",
+        "confidence": 61.0,
+        "pop_density": 18500
       }
     },
     {
@@ -19852,9 +20052,9 @@
         "area_km2": 3.36,
         "population": 120000,
         "density_per_km2": 35721,
-        "lst_avg_celsius": 20.8,
-        "ndvi_avg": 0.07,
-        "risk_score": 60.2,
+        "lst_avg_celsius": 38.8,
+        "ndvi_avg": 0.072,
+        "risk_score": 65.3,
         "vulnerability": "High Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.23,
@@ -19863,7 +20063,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.3
+        "cool_roofs_ratio": 0.3,
+        "ndbi_avg": 0.055,
+        "ndwi_avg": -0.142,
+        "dem_m": 57,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 93.3,
+        "pop_density": 18500
       }
     },
     {
@@ -20277,10 +20485,10 @@
         "area_km2": 4.96,
         "population": 115000,
         "density_per_km2": 23181,
-        "lst_avg_celsius": 13.83,
-        "ndvi_avg": 0.075,
-        "risk_score": 50.8,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 33.9,
+        "ndvi_avg": 0.198,
+        "risk_score": 57.4,
+        "vulnerability": "High Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.31,
         "elderly_ratio": 0.081,
@@ -20288,7 +20496,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.055,
+        "ndwi_avg": -0.307,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 90.6,
+        "pop_density": 18500
       }
     },
     {
@@ -20972,9 +21188,9 @@
         "area_km2": 1.76,
         "population": 110000,
         "density_per_km2": 62573,
-        "lst_avg_celsius": 18.39,
-        "ndvi_avg": 0.064,
-        "risk_score": 56.8,
+        "lst_avg_celsius": 36.1,
+        "ndvi_avg": 0.206,
+        "risk_score": 58.8,
         "vulnerability": "High Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.21,
@@ -20983,7 +21199,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.1,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.008,
+        "ndwi_avg": -0.267,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -21737,10 +21961,10 @@
         "area_km2": 10.71,
         "population": 95000,
         "density_per_km2": 8873,
-        "lst_avg_celsius": 18.8,
-        "ndvi_avg": 0.156,
-        "risk_score": 43.9,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 33.6,
+        "ndvi_avg": 0.326,
+        "risk_score": 53.5,
+        "vulnerability": "High Risk",
         "slum_density": 0.09,
         "outdoor_labor_index": 0.14,
         "elderly_ratio": 0.098,
@@ -21748,7 +21972,15 @@
         "water_scarcity_index": 0.21,
         "tree_canopy_ratio": 0.23,
         "public_water_access": 0.79,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": -0.015,
+        "ndwi_avg": -0.328,
+        "dem_m": 52,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -23082,10 +23314,10 @@
         "area_km2": 14.05,
         "population": 85000,
         "density_per_km2": 6050,
-        "lst_avg_celsius": 14.13,
-        "ndvi_avg": 0.112,
-        "risk_score": 48.9,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 35.1,
+        "ndvi_avg": 0.328,
+        "risk_score": 53.0,
+        "vulnerability": "High Risk",
         "slum_density": 0.1,
         "outdoor_labor_index": 0.24,
         "elderly_ratio": 0.091,
@@ -23093,7 +23325,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.17,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.28
+        "cool_roofs_ratio": 0.28,
+        "ndbi_avg": -0.098,
+        "ndwi_avg": -0.373,
+        "dem_m": 45,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 18500
       }
     },
     {
@@ -23847,9 +24087,9 @@
         "area_km2": 13.02,
         "population": 90000,
         "density_per_km2": 6913,
-        "lst_avg_celsius": 21.37,
-        "ndvi_avg": 0.158,
-        "risk_score": 40.4,
+        "lst_avg_celsius": 34.4,
+        "ndvi_avg": 0.522,
+        "risk_score": 34.4,
         "vulnerability": "Medium Risk",
         "slum_density": 0.09,
         "outdoor_labor_index": 0.05,
@@ -23858,7 +24098,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.24,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.31
+        "cool_roofs_ratio": 0.31,
+        "ndbi_avg": -0.023,
+        "ndwi_avg": -0.533,
+        "dem_m": 47,
+        "lulc": 40,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.8,
+        "pop_density": 800
       }
     },
     {
@@ -24202,10 +24450,10 @@
         "area_km2": 4.1,
         "population": 95000,
         "density_per_km2": 23160,
-        "lst_avg_celsius": 17.4,
-        "ndvi_avg": 0.099,
-        "risk_score": 48.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 36.8,
+        "ndvi_avg": 0.194,
+        "risk_score": 60.3,
+        "vulnerability": "High Risk",
         "slum_density": 0.03,
         "outdoor_labor_index": 0.23,
         "elderly_ratio": 0.096,
@@ -24213,7 +24461,15 @@
         "water_scarcity_index": 0.17,
         "tree_canopy_ratio": 0.15,
         "public_water_access": 0.83,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.019,
+        "ndwi_avg": -0.259,
+        "dem_m": 54,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.5,
+        "pop_density": 18500
       }
     },
     {
@@ -24947,10 +25203,10 @@
         "area_km2": 4.81,
         "population": 85000,
         "density_per_km2": 17669,
-        "lst_avg_celsius": 16.37,
-        "ndvi_avg": 0.108,
-        "risk_score": 53.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.5,
+        "ndvi_avg": 0.123,
+        "risk_score": 57.2,
+        "vulnerability": "High Risk",
         "slum_density": 0.14,
         "outdoor_labor_index": 0.27,
         "elderly_ratio": 0.092,
@@ -24958,7 +25214,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.16,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.28
+        "cool_roofs_ratio": 0.28,
+        "ndbi_avg": -0.006,
+        "ndwi_avg": -0.183,
+        "dem_m": 50,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -25297,10 +25561,10 @@
         "area_km2": 2.65,
         "population": 100000,
         "density_per_km2": 37776,
-        "lst_avg_celsius": 12.05,
-        "ndvi_avg": 0.063,
-        "risk_score": 49.6,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.4,
+        "ndvi_avg": 0.087,
+        "risk_score": 59.2,
+        "vulnerability": "High Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.32,
         "elderly_ratio": 0.074,
@@ -25308,7 +25572,15 @@
         "water_scarcity_index": 0.2,
         "tree_canopy_ratio": 0.09,
         "public_water_access": 0.8,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.055,
+        "ndwi_avg": -0.16,
+        "dem_m": 53,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 90.4,
+        "pop_density": 18500
       }
     },
     {
@@ -25982,10 +26254,10 @@
         "area_km2": 2.43,
         "population": 110000,
         "density_per_km2": 45338,
-        "lst_avg_celsius": 8.35,
-        "ndvi_avg": 0.034,
-        "risk_score": 44.2,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.5,
+        "ndvi_avg": 0.206,
+        "risk_score": 58.0,
+        "vulnerability": "High Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.23,
         "elderly_ratio": 0.108,
@@ -25993,7 +26265,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.05,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.31
+        "cool_roofs_ratio": 0.31,
+        "ndbi_avg": 0.055,
+        "ndwi_avg": -0.314,
+        "dem_m": 58,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 90.6,
+        "pop_density": 18500
       }
     },
     {
@@ -26252,10 +26532,10 @@
         "area_km2": 3.37,
         "population": 125000,
         "density_per_km2": 37047,
-        "lst_avg_celsius": 10.16,
-        "ndvi_avg": 0.039,
-        "risk_score": 49.0,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.0,
+        "ndvi_avg": 0.202,
+        "risk_score": 57.4,
+        "vulnerability": "High Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.31,
         "elderly_ratio": 0.093,
@@ -26263,7 +26543,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.06,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.33
+        "cool_roofs_ratio": 0.33,
+        "ndbi_avg": 0.056,
+        "ndwi_avg": -0.289,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 90.6,
+        "pop_density": 18500
       }
     },
     {
@@ -27762,9 +28050,9 @@
         "area_km2": 14.98,
         "population": 130000,
         "density_per_km2": 8677,
-        "lst_avg_celsius": 13.66,
-        "ndvi_avg": 0.091,
-        "risk_score": 44.9,
+        "lst_avg_celsius": 36.0,
+        "ndvi_avg": 0.168,
+        "risk_score": 42.9,
         "vulnerability": "Medium Risk",
         "slum_density": 0.05,
         "outdoor_labor_index": 0.28,
@@ -27773,7 +28061,15 @@
         "water_scarcity_index": 0.19,
         "tree_canopy_ratio": 0.14,
         "public_water_access": 0.81,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": 0.084,
+        "ndwi_avg": -0.285,
+        "dem_m": 57,
+        "lulc": 10,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 38.2,
+        "pop_density": 50
       }
     },
     {
@@ -29102,10 +29398,10 @@
         "area_km2": 8.53,
         "population": 115000,
         "density_per_km2": 13477,
-        "lst_avg_celsius": 9.7,
-        "ndvi_avg": 0.074,
-        "risk_score": 40.9,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 34.4,
+        "ndvi_avg": 0.455,
+        "risk_score": 51.3,
+        "vulnerability": "High Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.22,
         "elderly_ratio": 0.092,
@@ -29113,7 +29409,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": -0.072,
+        "ndwi_avg": -0.465,
+        "dem_m": 62,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 18500
       }
     },
     {
@@ -29717,9 +30021,9 @@
         "area_km2": 5.7,
         "population": 80000,
         "density_per_km2": 14043,
-        "lst_avg_celsius": 16.56,
-        "ndvi_avg": 0.076,
-        "risk_score": 57.5,
+        "lst_avg_celsius": 34.9,
+        "ndvi_avg": 0.143,
+        "risk_score": 60.0,
         "vulnerability": "High Risk",
         "slum_density": 0.1,
         "outdoor_labor_index": 0.31,
@@ -29728,7 +30032,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.31
+        "cool_roofs_ratio": 0.31,
+        "ndbi_avg": 0.08,
+        "ndwi_avg": -0.245,
+        "dem_m": 48,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Medium Heat Zone",
+        "confidence": 36.5,
+        "pop_density": 18500
       }
     },
     {
@@ -30512,9 +30824,9 @@
         "area_km2": 5.33,
         "population": 92000,
         "density_per_km2": 17261,
-        "lst_avg_celsius": 22.5,
-        "ndvi_avg": 0.113,
-        "risk_score": 55.5,
+        "lst_avg_celsius": 39.9,
+        "ndvi_avg": 0.05,
+        "risk_score": 65.5,
         "vulnerability": "High Risk",
         "slum_density": 0.02,
         "outdoor_labor_index": 0.25,
@@ -30523,7 +30835,15 @@
         "water_scarcity_index": 0.19,
         "tree_canopy_ratio": 0.17,
         "public_water_access": 0.81,
-        "cool_roofs_ratio": 0.34
+        "cool_roofs_ratio": 0.34,
+        "ndbi_avg": 0.006,
+        "ndwi_avg": -0.118,
+        "dem_m": 50,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -33017,9 +33337,9 @@
         "area_km2": 30.23,
         "population": 105000,
         "density_per_km2": 3473,
-        "lst_avg_celsius": 14.74,
-        "ndvi_avg": 0.142,
-        "risk_score": 52.4,
+        "lst_avg_celsius": 32.9,
+        "ndvi_avg": 0.401,
+        "risk_score": 32.9,
         "vulnerability": "Medium Risk",
         "slum_density": 0.1,
         "outdoor_labor_index": 0.29,
@@ -33028,7 +33348,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.21,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.31
+        "cool_roofs_ratio": 0.31,
+        "ndbi_avg": -0.052,
+        "ndwi_avg": -0.473,
+        "dem_m": 49,
+        "lulc": 40,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.9,
+        "pop_density": 800
       }
     },
     {
@@ -33607,10 +33935,10 @@
         "area_km2": 3.26,
         "population": 120000,
         "density_per_km2": 36807,
-        "lst_avg_celsius": 15.89,
-        "ndvi_avg": 0.054,
-        "risk_score": 51.1,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 37.2,
+        "ndvi_avg": 0.103,
+        "risk_score": 65.0,
+        "vulnerability": "High Risk",
         "slum_density": 0.09,
         "outdoor_labor_index": 0.16,
         "elderly_ratio": 0.097,
@@ -33618,7 +33946,15 @@
         "water_scarcity_index": 0.21,
         "tree_canopy_ratio": 0.08,
         "public_water_access": 0.79,
-        "cool_roofs_ratio": 0.28
+        "cool_roofs_ratio": 0.28,
+        "ndbi_avg": 0.126,
+        "ndwi_avg": -0.179,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "High Heat Zone",
+        "confidence": 58.6,
+        "pop_density": 18500
       }
     },
     {
@@ -34092,10 +34428,10 @@
         "area_km2": 3.45,
         "population": 95000,
         "density_per_km2": 27569,
-        "lst_avg_celsius": 19.08,
-        "ndvi_avg": 0.075,
-        "risk_score": 58.3,
-        "vulnerability": "High Risk",
+        "lst_avg_celsius": 34.2,
+        "ndvi_avg": 0.554,
+        "risk_score": 29.1,
+        "vulnerability": "Low Risk",
         "slum_density": 0.21,
         "outdoor_labor_index": 0.19,
         "elderly_ratio": 0.058,
@@ -34103,7 +34439,15 @@
         "water_scarcity_index": 0.29,
         "tree_canopy_ratio": 0.11,
         "public_water_access": 0.71,
-        "cool_roofs_ratio": 0.25
+        "cool_roofs_ratio": 0.25,
+        "ndbi_avg": -0.155,
+        "ndwi_avg": -0.538,
+        "dem_m": 56,
+        "lulc": 10,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 50
       }
     },
     {
@@ -34587,10 +34931,10 @@
         "area_km2": 8.2,
         "population": 90000,
         "density_per_km2": 10972,
-        "lst_avg_celsius": 19.53,
-        "ndvi_avg": 0.105,
-        "risk_score": 48.6,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 33.9,
+        "ndvi_avg": 0.186,
+        "risk_score": 55.6,
+        "vulnerability": "High Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.07,
         "elderly_ratio": 0.102,
@@ -34598,7 +34942,15 @@
         "water_scarcity_index": 0.22,
         "tree_canopy_ratio": 0.16,
         "public_water_access": 0.78,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.008,
+        "ndwi_avg": -0.238,
+        "dem_m": 59,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.7,
+        "pop_density": 18500
       }
     },
     {
@@ -35342,9 +35694,9 @@
         "area_km2": 10.3,
         "population": 85000,
         "density_per_km2": 8256,
-        "lst_avg_celsius": 12.29,
-        "ndvi_avg": 0.087,
-        "risk_score": 37.5,
+        "lst_avg_celsius": 33.4,
+        "ndvi_avg": 0.686,
+        "risk_score": 41.7,
         "vulnerability": "Medium Risk",
         "slum_density": 0.06,
         "outdoor_labor_index": 0.04,
@@ -35353,7 +35705,15 @@
         "water_scarcity_index": 0.25,
         "tree_canopy_ratio": 0.13,
         "public_water_access": 0.75,
-        "cool_roofs_ratio": 0.32
+        "cool_roofs_ratio": 0.32,
+        "ndbi_avg": -0.262,
+        "ndwi_avg": -0.63,
+        "dem_m": 55,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 18500
       }
     },
     {
@@ -36212,10 +36572,10 @@
         "area_km2": 12.62,
         "population": 110000,
         "density_per_km2": 8718,
-        "lst_avg_celsius": 21.44,
-        "ndvi_avg": 0.149,
-        "risk_score": 49.8,
-        "vulnerability": "Medium Risk",
+        "lst_avg_celsius": 33.1,
+        "ndvi_avg": 0.334,
+        "risk_score": 51.7,
+        "vulnerability": "High Risk",
         "slum_density": 0.0,
         "outdoor_labor_index": 0.24,
         "elderly_ratio": 0.089,
@@ -36223,7 +36583,15 @@
         "water_scarcity_index": 0.15,
         "tree_canopy_ratio": 0.22,
         "public_water_access": 0.85,
-        "cool_roofs_ratio": 0.3
+        "cool_roofs_ratio": 0.3,
+        "ndbi_avg": -0.046,
+        "ndwi_avg": -0.389,
+        "dem_m": 60,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 99.9,
+        "pop_density": 18500
       }
     },
     {
@@ -36997,9 +37365,9 @@
         "area_km2": 14.67,
         "population": 88000,
         "density_per_km2": 6000,
-        "lst_avg_celsius": 17.18,
-        "ndvi_avg": 0.134,
-        "risk_score": 46.7,
+        "lst_avg_celsius": 34.4,
+        "ndvi_avg": 0.625,
+        "risk_score": 45.8,
         "vulnerability": "Medium Risk",
         "slum_density": 0.11,
         "outdoor_labor_index": 0.18,
@@ -37008,7 +37376,15 @@
         "water_scarcity_index": 0.23,
         "tree_canopy_ratio": 0.2,
         "public_water_access": 0.77,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.194,
+        "ndwi_avg": -0.585,
+        "dem_m": 57,
+        "lulc": 50,
+        "lulc_name": "Built-up (Urban)",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 18500
       }
     },
     {
@@ -38642,10 +39018,10 @@
         "area_km2": 36.69,
         "population": 95000,
         "density_per_km2": 2589,
-        "lst_avg_celsius": 22.42,
-        "ndvi_avg": 0.205,
-        "risk_score": 55.8,
-        "vulnerability": "High Risk",
+        "lst_avg_celsius": 34.5,
+        "ndvi_avg": 0.575,
+        "risk_score": 32.0,
+        "vulnerability": "Medium Risk",
         "slum_density": 0.15,
         "outdoor_labor_index": 0.27,
         "elderly_ratio": 0.092,
@@ -38653,7 +39029,1167 @@
         "water_scarcity_index": 0.29,
         "tree_canopy_ratio": 0.31,
         "public_water_access": 0.71,
-        "cool_roofs_ratio": 0.29
+        "cool_roofs_ratio": 0.29,
+        "ndbi_avg": -0.065,
+        "ndwi_avg": -0.546,
+        "dem_m": 55,
+        "lulc": 30,
+        "lulc_name": "Greenery / Vegetation",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 150
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.601086,
+              23.081556,
+              0.0
+            ],
+            [
+              72.600771,
+              23.079404,
+              0.0
+            ],
+            [
+              72.600566,
+              23.078186,
+              0.0
+            ],
+            [
+              72.599912,
+              23.074944,
+              0.0
+            ],
+            [
+              72.599667,
+              23.074303,
+              0.0
+            ],
+            [
+              72.5989,
+              23.072356,
+              0.0
+            ],
+            [
+              72.598429,
+              23.071291,
+              0.0
+            ],
+            [
+              72.598051,
+              23.070385,
+              0.0
+            ],
+            [
+              72.59756,
+              23.069528,
+              0.0
+            ],
+            [
+              72.596475,
+              23.068016,
+              0.0
+            ],
+            [
+              72.595228,
+              23.066753,
+              0.0
+            ],
+            [
+              72.593318,
+              23.065311,
+              0.0
+            ],
+            [
+              72.592191,
+              23.064639,
+              0.0
+            ],
+            [
+              72.590378,
+              23.06351,
+              0.0
+            ],
+            [
+              72.58979314920573,
+              23.06318867757114,
+              0.0
+            ],
+            [
+              72.5902022,
+              23.0615313,
+              0.0
+            ],
+            [
+              72.5898382,
+              23.0615283,
+              0.0
+            ],
+            [
+              72.58984047887787,
+              23.06150861878196,
+              0.0
+            ],
+            [
+              72.5902022,
+              23.0615116,
+              0.0
+            ],
+            [
+              72.5904572,
+              23.0615106,
+              0.0
+            ],
+            [
+              72.5907352,
+              23.0615136,
+              0.0
+            ],
+            [
+              72.5907342,
+              23.0618906,
+              0.0
+            ],
+            [
+              72.5907732,
+              23.0619156,
+              0.0
+            ],
+            [
+              72.5911232,
+              23.0619176,
+              0.0
+            ],
+            [
+              72.5914862,
+              23.0619346,
+              0.0
+            ],
+            [
+              72.5921862,
+              23.0623116,
+              0.0
+            ],
+            [
+              72.5927672,
+              23.0625676,
+              0.0
+            ],
+            [
+              72.5927952,
+              23.0625626,
+              0.0
+            ],
+            [
+              72.5929492,
+              23.0626266,
+              0.0
+            ],
+            [
+              72.59327220000002,
+              23.0627206,
+              0.0
+            ],
+            [
+              72.5934962,
+              23.0628106,
+              0.0
+            ],
+            [
+              72.5941712,
+              23.0631496,
+              0.0
+            ],
+            [
+              72.5944412,
+              23.0632896,
+              0.0
+            ],
+            [
+              72.5949122,
+              23.0636246,
+              0.0
+            ],
+            [
+              72.5956622,
+              23.0640716,
+              0.0
+            ],
+            [
+              72.5958202,
+              23.0641836,
+              0.0
+            ],
+            [
+              72.5958912,
+              23.0642166,
+              0.0
+            ],
+            [
+              72.5962022,
+              23.0643336,
+              0.0
+            ],
+            [
+              72.5963212,
+              23.0640456,
+              0.0
+            ],
+            [
+              72.5964322,
+              23.0639116,
+              0.0
+            ],
+            [
+              72.5968372,
+              23.0632816,
+              0.0
+            ],
+            [
+              72.5969142,
+              23.0632886,
+              0.0
+            ],
+            [
+              72.5970472,
+              23.0630446,
+              0.0
+            ],
+            [
+              72.5972072,
+              23.0627706,
+              0.0
+            ],
+            [
+              72.5973592,
+              23.0622996,
+              0.0
+            ],
+            [
+              72.59756320000001,
+              23.0619216,
+              0.0
+            ],
+            [
+              72.5977312,
+              23.0615566,
+              0.0
+            ],
+            [
+              72.5977652,
+              23.0614836,
+              0.0
+            ],
+            [
+              72.5978242,
+              23.0613566,
+              0.0
+            ],
+            [
+              72.59795020000001,
+              23.0610736,
+              0.0
+            ],
+            [
+              72.5980732,
+              23.0607236,
+              0.0
+            ],
+            [
+              72.5981292,
+              23.0605706,
+              0.0
+            ],
+            [
+              72.5983792,
+              23.0599486,
+              0.0
+            ],
+            [
+              72.5983812,
+              23.0597596,
+              0.0
+            ],
+            [
+              72.5987462,
+              23.0597156,
+              0.0
+            ],
+            [
+              72.5991792,
+              23.0597616,
+              0.0
+            ],
+            [
+              72.5991982,
+              23.0596326,
+              0.0
+            ],
+            [
+              72.5998682,
+              23.0596926,
+              0.0
+            ],
+            [
+              72.6011682,
+              23.0596346,
+              0.0
+            ],
+            [
+              72.6013952,
+              23.0595996,
+              0.0
+            ],
+            [
+              72.60162920000002,
+              23.0595626,
+              0.0
+            ],
+            [
+              72.6029642,
+              23.0594436,
+              0.0
+            ],
+            [
+              72.6038912,
+              23.0593606,
+              0.0
+            ],
+            [
+              72.6041442,
+              23.0595756,
+              0.0
+            ],
+            [
+              72.6050902,
+              23.0594066,
+              0.0
+            ],
+            [
+              72.6051812,
+              23.0595996,
+              0.0
+            ],
+            [
+              72.6089281,
+              23.0590076,
+              0.0
+            ],
+            [
+              72.6123761,
+              23.0560796,
+              0.0
+            ],
+            [
+              72.6123771,
+              23.0560836,
+              0.0
+            ],
+            [
+              72.6124701,
+              23.0560006,
+              0.0
+            ],
+            [
+              72.6124631,
+              23.0559906,
+              0.0
+            ],
+            [
+              72.61242937253824,
+              23.055944773743605,
+              0.0
+            ],
+            [
+              72.6126053,
+              23.0558221,
+              0.0
+            ],
+            [
+              72.6130113,
+              23.0555361,
+              0.0
+            ],
+            [
+              72.6131863,
+              23.0558591,
+              0.0
+            ],
+            [
+              72.6134923,
+              23.0564471,
+              0.0
+            ],
+            [
+              72.6137313,
+              23.0569051,
+              0.0
+            ],
+            [
+              72.6145873,
+              23.0585321,
+              0.0
+            ],
+            [
+              72.6148553,
+              23.0590411,
+              0.0
+            ],
+            [
+              72.6150703,
+              23.0594421,
+              0.0
+            ],
+            [
+              72.6152253,
+              23.0597301,
+              0.0
+            ],
+            [
+              72.61556186985267,
+              23.06035641259539,
+              0.0
+            ],
+            [
+              72.6154845,
+              23.0603721,
+              0.0
+            ],
+            [
+              72.6153785,
+              23.0604181,
+              0.0
+            ],
+            [
+              72.6155685,
+              23.0607891,
+              0.0
+            ],
+            [
+              72.6158445,
+              23.0613381,
+              0.0
+            ],
+            [
+              72.6163135,
+              23.0622761,
+              0.0
+            ],
+            [
+              72.6167585,
+              23.0631641,
+              0.0
+            ],
+            [
+              72.6171845,
+              23.0640231,
+              0.0
+            ],
+            [
+              72.6175105,
+              23.0638321,
+              0.0
+            ],
+            [
+              72.6179255,
+              23.0635901,
+              0.0
+            ],
+            [
+              72.6188785,
+              23.0630341,
+              0.0
+            ],
+            [
+              72.6198704,
+              23.0624561,
+              0.0
+            ],
+            [
+              72.6203444,
+              23.0628241,
+              0.0
+            ],
+            [
+              72.6204594,
+              23.0626651,
+              0.0
+            ],
+            [
+              72.6205634,
+              23.0625021,
+              0.0
+            ],
+            [
+              72.6202684,
+              23.0623041,
+              0.0
+            ],
+            [
+              72.6207964,
+              23.0619801,
+              0.0
+            ],
+            [
+              72.6215924,
+              23.0614951,
+              0.0
+            ],
+            [
+              72.6225144,
+              23.0609311,
+              0.0
+            ],
+            [
+              72.6240384,
+              23.0600361,
+              0.0
+            ],
+            [
+              72.6241484,
+              23.0599681,
+              0.0
+            ],
+            [
+              72.6245154,
+              23.0600491,
+              0.0
+            ],
+            [
+              72.6247994,
+              23.0600991,
+              0.0
+            ],
+            [
+              72.6257584,
+              23.0603321,
+              0.0
+            ],
+            [
+              72.6263714,
+              23.0604891,
+              0.0
+            ],
+            [
+              72.6265174,
+              23.0605251,
+              0.0
+            ],
+            [
+              72.6268144,
+              23.0608541,
+              0.0
+            ],
+            [
+              72.6269424,
+              23.0610041,
+              0.0
+            ],
+            [
+              72.6272284,
+              23.0612221,
+              0.0
+            ],
+            [
+              72.6274124,
+              23.0613621,
+              0.0
+            ],
+            [
+              72.6275204,
+              23.0615311,
+              0.0
+            ],
+            [
+              72.6277474,
+              23.0618971,
+              0.0
+            ],
+            [
+              72.6278654,
+              23.0620211,
+              0.0
+            ],
+            [
+              72.6278874,
+              23.0620431,
+              0.0
+            ],
+            [
+              72.6280974,
+              23.0622641,
+              0.0
+            ],
+            [
+              72.6287844,
+              23.0631021,
+              0.0
+            ],
+            [
+              72.6289194,
+              23.0632641,
+              0.0
+            ],
+            [
+              72.6292294,
+              23.0634601,
+              0.0
+            ],
+            [
+              72.6292014,
+              23.0635381,
+              0.0
+            ],
+            [
+              72.6290094,
+              23.0643991,
+              0.0
+            ],
+            [
+              72.6288184,
+              23.0648481,
+              0.0
+            ],
+            [
+              72.6283454,
+              23.0652641,
+              0.0
+            ],
+            [
+              72.6287864,
+              23.0657231,
+              0.0
+            ],
+            [
+              72.6297684,
+              23.0658801,
+              0.0
+            ],
+            [
+              72.6302334,
+              23.0659451,
+              0.0
+            ],
+            [
+              72.6308084,
+              23.0659741,
+              0.0
+            ],
+            [
+              72.6318724,
+              23.0661881,
+              0.0
+            ],
+            [
+              72.6317384,
+              23.0668141,
+              0.0
+            ],
+            [
+              72.6326914,
+              23.0669921,
+              0.0
+            ],
+            [
+              72.6324554,
+              23.0678541,
+              0.0
+            ],
+            [
+              72.6325214,
+              23.0679291,
+              0.0
+            ],
+            [
+              72.6323274,
+              23.0685881,
+              0.0
+            ],
+            [
+              72.6321624,
+              23.0690211,
+              0.0
+            ],
+            [
+              72.6320654,
+              23.0696591,
+              0.0
+            ],
+            [
+              72.6325824,
+              23.0702881,
+              0.0
+            ],
+            [
+              72.6326184,
+              23.0716551,
+              0.0
+            ],
+            [
+              72.6327094,
+              23.0718271,
+              0.0
+            ],
+            [
+              72.6328524,
+              23.0720311,
+              0.0
+            ],
+            [
+              72.63299840000002,
+              23.0722321,
+              0.0
+            ],
+            [
+              72.6330914,
+              23.0723701,
+              0.0
+            ],
+            [
+              72.6333154,
+              23.0726791,
+              0.0
+            ],
+            [
+              72.6333984,
+              23.0727881,
+              0.0
+            ],
+            [
+              72.6335394,
+              23.0729931,
+              0.0
+            ],
+            [
+              72.6335764,
+              23.0730461,
+              0.0
+            ],
+            [
+              72.6337634,
+              23.0733031,
+              0.0
+            ],
+            [
+              72.6340054,
+              23.0736341,
+              0.0
+            ],
+            [
+              72.6341954,
+              23.0738941,
+              0.0
+            ],
+            [
+              72.63438440000002,
+              23.0741621,
+              0.0
+            ],
+            [
+              72.6344204,
+              23.0742131,
+              0.0
+            ],
+            [
+              72.6344304,
+              23.0742281,
+              0.0
+            ],
+            [
+              72.6346164,
+              23.0744861,
+              0.0
+            ],
+            [
+              72.6347164,
+              23.0746251,
+              0.0
+            ],
+            [
+              72.6347984,
+              23.0747411,
+              0.0
+            ],
+            [
+              72.6349014,
+              23.0748831,
+              0.0
+            ],
+            [
+              72.6352894,
+              23.0754181,
+              0.0
+            ],
+            [
+              72.6353304,
+              23.0754741,
+              0.0
+            ],
+            [
+              72.6355154,
+              23.0757291,
+              0.0
+            ],
+            [
+              72.6355474,
+              23.0757601,
+              0.0
+            ],
+            [
+              72.6356704,
+              23.0759391,
+              0.0
+            ],
+            [
+              72.6359394,
+              23.0763141,
+              0.0
+            ],
+            [
+              72.6360564,
+              23.0765231,
+              0.0
+            ],
+            [
+              72.6360724,
+              23.0767841,
+              0.0
+            ],
+            [
+              72.6361024,
+              23.0774281,
+              0.0
+            ],
+            [
+              72.6368044,
+              23.0776701,
+              0.0
+            ],
+            [
+              72.63680429276005,
+              23.077709528558305,
+              0.0
+            ],
+            [
+              72.6361025,
+              23.0774676,
+              0.0
+            ],
+            [
+              72.6361055,
+              23.0780756,
+              0.0
+            ],
+            [
+              72.6357695,
+              23.0780236,
+              0.0
+            ],
+            [
+              72.6355085,
+              23.0800696,
+              0.0
+            ],
+            [
+              72.6349085,
+              23.0802496,
+              0.0
+            ],
+            [
+              72.6342845,
+              23.0801156,
+              0.0
+            ],
+            [
+              72.6339835,
+              23.0799906,
+              0.0
+            ],
+            [
+              72.6328255,
+              23.0800106,
+              0.0
+            ],
+            [
+              72.6314725,
+              23.0798456,
+              0.0
+            ],
+            [
+              72.6305065,
+              23.0797096,
+              0.0
+            ],
+            [
+              72.6295415,
+              23.0795466,
+              0.0
+            ],
+            [
+              72.6294845,
+              23.0794536,
+              0.0
+            ],
+            [
+              72.6298165,
+              23.0786796,
+              0.0
+            ],
+            [
+              72.6291305,
+              23.0785066,
+              0.0
+            ],
+            [
+              72.6290455,
+              23.0787296,
+              0.0
+            ],
+            [
+              72.6284545,
+              23.0787126,
+              0.0
+            ],
+            [
+              72.6282545,
+              23.0792156,
+              0.0
+            ],
+            [
+              72.6280525,
+              23.0791746,
+              0.0
+            ],
+            [
+              72.6281695,
+              23.0784666,
+              0.0
+            ],
+            [
+              72.6269655,
+              23.0783786,
+              0.0
+            ],
+            [
+              72.6268105,
+              23.0789206,
+              0.0
+            ],
+            [
+              72.6267565,
+              23.0790536,
+              0.0
+            ],
+            [
+              72.6263785,
+              23.0791256,
+              0.0
+            ],
+            [
+              72.6255345,
+              23.0788496,
+              0.0
+            ],
+            [
+              72.6255185,
+              23.0797546,
+              0.0
+            ],
+            [
+              72.6249605,
+              23.0796386,
+              0.0
+            ],
+            [
+              72.6242145,
+              23.0796076,
+              0.0
+            ],
+            [
+              72.6234405,
+              23.0795586,
+              0.0
+            ],
+            [
+              72.6219335,
+              23.0794926,
+              0.0
+            ],
+            [
+              72.6212085,
+              23.0795206,
+              0.0
+            ],
+            [
+              72.6205575,
+              23.0795686,
+              0.0
+            ],
+            [
+              72.6196275,
+              23.0795806,
+              0.0
+            ],
+            [
+              72.6182765,
+              23.0796506,
+              0.0
+            ],
+            [
+              72.6174285,
+              23.0794586,
+              0.0
+            ],
+            [
+              72.6171825,
+              23.0798236,
+              0.0
+            ],
+            [
+              72.6167685,
+              23.0805606,
+              0.0
+            ],
+            [
+              72.6162055,
+              23.0813326,
+              0.0
+            ],
+            [
+              72.6157425,
+              23.0820726,
+              0.0
+            ],
+            [
+              72.6158085,
+              23.0820956,
+              0.0
+            ],
+            [
+              72.6155895,
+              23.0825076,
+              0.0
+            ],
+            [
+              72.6151785,
+              23.0829916,
+              0.0
+            ],
+            [
+              72.6151105,
+              23.0830846,
+              0.0
+            ],
+            [
+              72.6146185,
+              23.0831996,
+              0.0
+            ],
+            [
+              72.6140145,
+              23.0833786,
+              0.0
+            ],
+            [
+              72.6127495,
+              23.0835926,
+              0.0
+            ],
+            [
+              72.6113505,
+              23.0840126,
+              0.0
+            ],
+            [
+              72.6098345,
+              23.0844636,
+              0.0
+            ],
+            [
+              72.6091235,
+              23.0846256,
+              0.0
+            ],
+            [
+              72.6081625,
+              23.0849036,
+              0.0
+            ],
+            [
+              72.6071065,
+              23.0851666,
+              0.0
+            ],
+            [
+              72.6059995,
+              23.0854576,
+              0.0
+            ],
+            [
+              72.6047615,
+              23.0856636,
+              0.0
+            ],
+            [
+              72.6045295,
+              23.0857046,
+              0.0
+            ],
+            [
+              72.6021675,
+              23.0831186,
+              0.0
+            ],
+            [
+              72.6019015,
+              23.0842456,
+              0.0
+            ],
+            [
+              72.60152032855979,
+              23.0849215958807,
+              0.0
+            ],
+            [
+              72.601441,
+              23.083315,
+              0.0
+            ],
+            [
+              72.601086,
+              23.081556,
+              0.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 49,
+        "name": "Ahmedabad Cantonment & Airport Complex",
+        "zone": "North (Cantonment Board / AAI)",
+        "is_special_zone": true,
+        "special_tag": "Autonomous Defence & Civil Aviation Zone",
+        "area_km2": 8.52,
+        "population": 28500,
+        "density_per_km2": 3345,
+        "lst_avg_celsius": 32.0,
+        "ndvi_avg": 0.543,
+        "ndbi_avg": -0.067,
+        "ndwi_avg": -0.528,
+        "dem_m": 55,
+        "lulc": 30,
+        "lulc_name": "Aviation Hub / Cantonment Greenery",
+        "risk_score": 24.5,
+        "vulnerability": "Low Risk",
+        "heat_zone": "Low Heat Zone",
+        "confidence": 100.0,
+        "pop_density": 3345
       }
     }
   ]

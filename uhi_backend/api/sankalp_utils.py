@@ -20,7 +20,10 @@ class MicroclimateOptimizer:
 
     def _initialize_engine(self):
         base_dir = settings.BASE_DIR
-        self.csv_path = os.path.join(base_dir, 'knowledge_base', 'SANKALP_v4_Max_Density_Data.csv')
+        csv_p = os.path.join(base_dir, 'training_data', 'SANKALP_v4_Max_Density_Data.csv')
+        if not os.path.exists(csv_p):
+            csv_p = os.path.join(base_dir, 'knowledge_base', 'SANKALP_v4_Max_Density_Data.csv')
+        self.csv_path = csv_p
         
         wind_path = os.path.join(base_dir, 'models', 'sankalp_wind_agent.json')
         uhi_path = os.path.join(base_dir, 'models', 'sankalp_v4_max_classifier.json')
@@ -91,35 +94,24 @@ class MicroclimateOptimizer:
                 lf = 0.50 if h == 15.0 else (0.30 if h == 30.0 else 0.10)
                 wind_dir = 230.0 + (h * 0.2)
 
-                # 2. Vectorized Wind Agent Execution (Enforcing clean Named Schema matching model input variables)
-                input_wind_df = pd.DataFrame([{
-                    'height': h, 'dem': dem, 'base_wind': base_wind,
-                    'wind_dir': wind_dir, 'lambda_p': lp, 'lambda_f': lf
-                }])
-                
+                # 2. Vectorized Wind Agent Execution (6-D feature contract: [base_wind, wind_dir, lp, lf, svf, height])
+                input_wind_vec = np.array([[base_wind, wind_dir, lp, lf, svf, h]], dtype=np.float32)
                 try:
-                    raw_pred_wind = float(self.wind_model.predict(input_wind_df)[0])
-                    # If models yield overfit bounds (e.g., flat 0.17), seamlessly integrate the microclimate height coefficient
-                    pred_wind = raw_pred_wind if raw_pred_wind != 0.17 else (base_wind * (1.2 + (h / 35.0)) * (1.0 - lp))
+                    raw_pred_wind = float(self.wind_model.predict(input_wind_vec)[0])
+                    pred_wind = max(0.1, round(raw_pred_wind, 2))
                 except Exception:
-                    pred_wind = base_wind * (1.2 + (h / 35.0)) * (1.0 - lp)
+                    pred_wind = round(base_wind * (1.2 + (h / 35.0)) * (1.0 - lp), 2)
 
                 # 3. Microclimate Thermodynamics Execution
                 sim_lst = lst - ((ndbi - sim_ndbi) * 14.5) - (pred_wind * 0.9)
                 sim_lst = max(26.0, min(48.0, sim_lst))
 
-                # 4. UHI Classifier Evaluation (Passing remediated values to verify if plan breaks the trap status)
-                input_uhi_df = pd.DataFrame([{
-                    'system:index': sys_idx, 'dem': dem, 'lst': sim_lst, 'lulc': lulc,
-                    'ndbi': sim_ndbi, 'ndbi_focal': ndbi_focal, 'ndvi': sim_ndvi,
-                    'ndvi_focal': ndvi_focal, 'ndwi': ndwi, 'height': h
-                }])
+                # 4. SANKALP v4 Max Classifier Evaluation (10-D vector: [LST, DEM, LULC, NDBI, NDVI, NDWI, NDBI_Focal, NDVI_Focal, USI, USI_Focal])
+                sim_usi = sim_ndbi - sim_ndvi
+                input_uhi_vec = np.array([[sim_lst, dem, lulc, sim_ndbi, sim_ndvi, ndwi, ndbi_focal, ndvi_focal, sim_usi, sim_usi]], dtype=np.float32)
                 
                 try:
-                    is_hotspot = int(self.uhi_model.predict(input_uhi_df)[0])
-                    # Ensure programmatic clearance if temperature falls into stable comfortable zones
-                    if sim_lst < 34.0:
-                        is_hotspot = 0
+                    is_hotspot = int(self.uhi_model.predict(input_uhi_vec)[0])
                 except Exception:
                     is_hotspot = 1 if sim_lst > 36.5 else 0
 

@@ -48,28 +48,18 @@ if ahm_path.exists():
 else:
     CITY_BOUNDARIES["Ahmedabad"] = Polygon(AHMEDABAD_AMC_FALLBACK)
 
-# 2. Other regions
-other_regions_files = {
-    "Gandhinagar": "boundary_gandhinagar.geojson",
-    "Delhi": "boundary_delhi.geojson",
-    "Mumbai_City": "boundary_mumbai_city.geojson",
-    "Mumbai_Suburban": "boundary_mumbai_suburban.geojson",
-    "Thane": "boundary_thane.geojson",
-    "Mumbai_Metro": "boundary_mumbai_metro.geojson"
-}
+# 2. Gandhinagar
+gandhi_path = BASE_DIR / 'datasets' / 'boundary_gandhinagar.geojson'
+if gandhi_path.exists():
+    try:
+        with open(gandhi_path, 'r', encoding='utf-8') as f:
+            _data = json.load(f)
+        CITY_BOUNDARIES["Gandhinagar"] = shape(_data["features"][0]["geometry"])
+    except Exception as e:
+        print(f"Error loading boundary for Gandhinagar: {e}")
 
-for prefix, filename in other_regions_files.items():
-    filepath = BASE_DIR / 'datasets' / filename
-    if filepath.exists():
-        try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                _data = json.load(f)
-            CITY_BOUNDARIES[prefix] = shape(_data["features"][0]["geometry"])
-        except Exception as e:
-            print(f"Error loading boundary for {prefix}: {e}")
-
-# Search order prioritizing smaller administrative boundaries over the larger metro boundary
-CHECK_ORDER = ["Ahmedabad", "Gandhinagar", "Delhi", "Mumbai_City", "Mumbai_Suburban", "Thane", "Mumbai_Metro"]
+# Search order prioritizing Ahmedabad and Gandhinagar
+CHECK_ORDER = ["Ahmedabad", "Gandhinagar"]
 
 def get_containing_city(lon, lat):
     pt = Point(lon, lat)
@@ -85,9 +75,47 @@ def is_within_ahmedabad(lon, lat):
     pt = Point(lon, lat)
     return CITY_BOUNDARIES["Ahmedabad"].contains(pt)
 
+_RASTER_DATA_CACHE: dict = {}
+
+def get_raster_data(filepath: Path):
+    path_str = str(filepath)
+    if path_str not in _RASTER_DATA_CACHE:
+        if not filepath.exists():
+            _RASTER_DATA_CACHE[path_str] = None
+        else:
+            try:
+                with rasterio.open(filepath) as src:
+                    arr = src.read(1)
+                    transform = src.transform
+                    nodata = src.nodata
+                    _RASTER_DATA_CACHE[path_str] = (arr, transform, nodata)
+            except Exception:
+                _RASTER_DATA_CACHE[path_str] = None
+    return _RASTER_DATA_CACHE[path_str]
+
+def sample_raster_point(filepath: Path, lon: float, lat: float, default=None):
+    raster_info = get_raster_data(filepath)
+    if raster_info is None:
+        return default
+    arr, transform, nodata = raster_info
+    try:
+        inv_transform = ~transform
+        col_f, row_f = inv_transform * (lon, lat)
+        row, col = int(np.floor(row_f)), int(np.floor(col_f))
+        if 0 <= row < arr.shape[0] and 0 <= col < arr.shape[1]:
+            val = arr[row, col]
+            if np.isnan(val) or (nodata is not None and val == nodata):
+                return default
+            if isinstance(val, (np.integer, np.int8, np.int16, np.int32, np.int64, np.uint8, np.uint16, np.uint32, np.uint64)):
+                return int(val)
+            return float(val)
+        return default
+    except Exception:
+        return default
+
 def sample_environmental_data(lon, lat):
     """
-    Samples environmental indicators dynamically from the correct city's GeoTIFFs.
+    Samples environmental indicators dynamically from the correct city's GeoTIFFs with memory caching.
     """
     city_prefix = get_containing_city(lon, lat)
     if not city_prefix:
@@ -96,34 +124,19 @@ def sample_environmental_data(lon, lat):
     results = {}
     
     for key, filename_suffix in TIFF_FILES.items():
-        # Resolve path using the containing city's prefix
-        # e.g., Ahmedabad_DEM.tif -> Delhi_DEM.tif
         suffix_part = filename_suffix.split('_', 1)[1]
         filename = f"{city_prefix}_{suffix_part}"
         filepath = MAPS_DIR / filename
         
         if not filepath.exists():
-            # Fallback to the default Ahmedabad file in case city specific file is missing
             filepath = MAPS_DIR / filename_suffix
             if not filepath.exists():
                 raise ValueError("Analysis unavailable due to missing validated datasets.")
             
-        with rasterio.open(filepath) as src:
-            row, col = src.index(lon, lat)
-            try:
-                val = src.read(1)[row, col]
-            except IndexError:
-                raise ValueError("Analysis unavailable due to missing validated datasets.")
-                
-            if np.isnan(val) or val == src.nodata:
-                raise ValueError("Analysis unavailable due to missing validated datasets.")
-                
-            if isinstance(val, (np.integer, np.int8, np.int16, np.int32, np.int64, np.uint8, np.uint16, np.uint32, np.uint64)):
-                results[key] = int(val)
-            elif isinstance(val, (np.floating, np.float32, np.float64)):
-                results[key] = float(val)
-            else:
-                results[key] = val
+        val = sample_raster_point(filepath, lon, lat, default=None)
+        if val is None:
+            raise ValueError("Analysis unavailable due to missing validated datasets.")
+        results[key] = val
                 
     required_keys = ['dem', 'lst', 'lulc', 'ndbi', 'ndvi', 'ndwi']
     if not all(k in results for k in required_keys):
@@ -131,11 +144,15 @@ def sample_environmental_data(lon, lat):
          
     return results
 
+_HEAT_ZONES_CACHE: dict = {}
+CACHE_DIR = BASE_DIR / 'cache'
+
 def get_heat_zones_grid_cached(city_prefix='Ahmedabad'):
     """
     Dynamically generates a regularly spaced 35x35 grid of UHI heat zones covering the bounding box
-    of the selected city.
+    of the selected city, and caches both in-memory and on-disk for instantaneous responses.
     """
+    global _HEAT_ZONES_CACHE
     # Ensure correct format matching file prefix
     if city_prefix not in CITY_BOUNDARIES:
         # Fallback mapping
@@ -149,6 +166,21 @@ def get_heat_zones_grid_cached(city_prefix='Ahmedabad'):
             'mumbai_metro': 'Mumbai_Metro'
         }
         city_prefix = mapped_prefixes.get(city_prefix.lower(), 'Ahmedabad')
+
+    if city_prefix in _HEAT_ZONES_CACHE and len(_HEAT_ZONES_CACHE[city_prefix]) > 0:
+        return _HEAT_ZONES_CACHE[city_prefix]
+
+    # Check disk cache
+    cache_file = CACHE_DIR / f"heat_zones_{city_prefix.lower()}.json"
+    if cache_file.exists():
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if data and len(data) > 0:
+                _HEAT_ZONES_CACHE[city_prefix] = data
+                return data
+        except Exception:
+            pass
         
     lst_filename = f"{city_prefix}_LST.tif"
     lst_path = MAPS_DIR / lst_filename
@@ -169,35 +201,75 @@ def get_heat_zones_grid_cached(city_prefix='Ahmedabad'):
     lons = np.linspace(bounds[0], bounds[2], 35)
     lats = np.linspace(bounds[1], bounds[3], 35)
     
-    with rasterio.open(lst_path) as src:
-        data = src.read(1)
+    # Load all raster bands needed by the model for this city
+    ndvi_path = MAPS_DIR / f"{city_prefix}_NDVI.tif"
+    ndbi_path = MAPS_DIR / f"{city_prefix}_NDBI.tif"
+    ndwi_path = MAPS_DIR / f"{city_prefix}_NDWI.tif"
+    dem_path  = MAPS_DIR / f"{city_prefix}_DEM.tif"
+    lulc_path = MAPS_DIR / f"{city_prefix}_LULC.tif"
+
+    def _open(p):
+        return rasterio.open(p) if p.exists() else None
+
+    lst_src  = rasterio.open(lst_path)
+    ndvi_src = _open(ndvi_path)
+    ndbi_src = _open(ndbi_path)
+    ndwi_src = _open(ndwi_path)
+    dem_src  = _open(dem_path)
+    lulc_src = _open(lulc_path)
+
+    def _read(src, lon, lat, default):
+        if src is None:
+            return default
+        try:
+            r, c = src.index(lon, lat)
+            v = src.read(1)[r, c]
+            return float(v) if not np.isnan(v) and v != src.nodata else default
+        except Exception:
+            return default
+
+    from shapely.prepared import prep
+    prep_geom = prep(boundary_geom)
+
+    # Collect all valid grid points and their raster values
+    batch_features = []
+    try:
+        lst_data = lst_src.read(1)
         for lon in lons:
             for lat in lats:
                 pt = Point(lon, lat)
-                if boundary_geom.contains(pt):
-                    row, col = src.index(lon, lat)
-                    try:
-                        val = data[row, col]
-                        if not np.isnan(val) and val != src.nodata and val > 0:
-                            lst_val = float(val)
-                            # Classify heat zones dynamically based on average values
-                            if lst_val < 32.5:
-                                zone = "Low Heat Zone"
-                            elif lst_val < 35.5:
-                                zone = "Medium Heat Zone"
-                            else:
-                                zone = "High Heat Zone"
-                                
-                            grid_points.append({
-                                'latitude': float(lat),
-                                'longitude': float(lon),
-                                'lst': round(lst_val, 2),
-                                'heat_zone': zone
-                            })
-                    except IndexError:
-                        pass
-                        
-    return grid_points
+                if not prep_geom.contains(pt):
+                    continue
+                try:
+                    row, col = lst_src.index(lon, lat)
+                    lst_val  = lst_data[row, col]
+                    if np.isnan(lst_val) or lst_val == lst_src.nodata or lst_val <= 0:
+                        continue
+                    lst_val = float(lst_val)
+                except IndexError:
+                    continue
+
+                batch_features.append({
+                    'lat':  float(lat),
+                    'lon':  float(lon),
+                    'lst':  lst_val,
+                    'ndvi': _read(ndvi_src, lon, lat, 0.15),
+                    'ndbi': _read(ndbi_src, lon, lat, 0.05),
+                    'ndwi': _read(ndwi_src, lon, lat, -0.10),
+                    'dem':  _read(dem_src,  lon, lat, 50.0),
+                    'lulc': _read(lulc_src, lon, lat, 50.0),
+                })
+    finally:
+        lst_src.close()
+        for s in [ndvi_src, ndbi_src, ndwi_src, dem_src, lulc_src]:
+            if s:
+                s.close()
+
+    # Batch-classify using the SANKALP v4 ONNX model — single source of truth
+    from .ml_service import predict_heat_zone_bulk
+    results = predict_heat_zone_bulk(batch_features)
+    _HEAT_ZONES_CACHE[city_prefix] = results
+    return results
 
 def validate_uploaded_dataset(filepath, file_type):
     """

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import (
     RegisterView, UserProfileView, AnalyzeCoordinatesView,
     MitigationRecommendationsView, ExportPDFReportView,
@@ -9,20 +9,19 @@ from .views import (
 )
 
 urlpatterns = [
-    path('auth/register/', RegisterView.as_view(), name='register'),
-    path('auth/profile/', UserProfileView.as_view(), name='profile'),
-    path('analyze/', AnalyzeCoordinatesView.as_view(), name='analyze'),
-    path('maps/heat-zones/', HeatZonesMapView.as_view(), name='heat-zones'),
-    path('maps/wards/', WardsBoundaryMapView.as_view(), name='wards'),
-    path('maps/boundary/', AhmedabadBoundaryMapView.as_view(), name='boundary'),
-    path('recommend/', MitigationRecommendationsView.as_view(), name='recommend'),
-    path('vault/download/<str:filename>/', DownloadDossierView.as_view(), name='download-dossier'),
-    path('reports/export/', ExportPDFReportView.as_view(), name='export-pdf'),
-    path('data/upload/', DatasetUploadView.as_view(), name='data-upload'),
-    path('dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
-    path('security/logs/', SecurityLogsView.as_view(), name='security-logs'),
-    path('mitigation/aquifer/simulate/', AquiferSimulateView.as_view(), name='aquifer-simulate'),
-    path('mitigation/aquifer/plans/', AquiferPlansView.as_view(), name='aquifer-plans'),
-    path('mitigation/aquifer/districts/hotspots/', AquiferHotspotsView.as_view(), name='aquifer-hotspots'),
+    re_path(r'^auth/register/?$', RegisterView.as_view(), name='register'),
+    re_path(r'^auth/profile/?$', UserProfileView.as_view(), name='profile'),
+    re_path(r'^analyze/?$', AnalyzeCoordinatesView.as_view(), name='analyze'),
+    re_path(r'^maps/heat-zones/?$', HeatZonesMapView.as_view(), name='heat-zones'),
+    re_path(r'^maps/wards/?$', WardsBoundaryMapView.as_view(), name='wards'),
+    re_path(r'^maps/boundary/?$', AhmedabadBoundaryMapView.as_view(), name='boundary'),
+    re_path(r'^recommend/?$', MitigationRecommendationsView.as_view(), name='recommend'),
+    re_path(r'^vault/download/(?P<filename>[^/]+)/?$', DownloadDossierView.as_view(), name='download-dossier'),
+    re_path(r'^reports/export/?$', ExportPDFReportView.as_view(), name='export-pdf'),
+    re_path(r'^data/upload/?$', DatasetUploadView.as_view(), name='data-upload'),
+    re_path(r'^dashboard/stats/?$', DashboardStatsView.as_view(), name='dashboard-stats'),
+    re_path(r'^security/logs/?$', SecurityLogsView.as_view(), name='security-logs'),
+    re_path(r'^mitigation/aquifer/simulate/?$', AquiferSimulateView.as_view(), name='aquifer-simulate'),
+    re_path(r'^mitigation/aquifer/plans/?$', AquiferPlansView.as_view(), name='aquifer-plans'),
+    re_path(r'^mitigation/aquifer/districts/hotspots/?$', AquiferHotspotsView.as_view(), name='aquifer-hotspots'),
 ]
-
