@@ -6,6 +6,9 @@ env/
 Active/
 Scripts/
 
+# Allow project scripts folder (not venv Scripts)
+!scripts/
+
 # Python caching and compiler files
 **/__pycache__/
 **/*.py[cod]
@@ -81,6 +84,7 @@ uhi_backend/training_data/SANKALP_v4_Expanded_Wind_Data.csv
 uhi_backend/training_data/SANKALP_v4_Max_Density_Data.csv
 # Generated evidence vault PDFs (runtime artifacts)
 uhi_backend/evidence_vault/*.pdf
+!uhi_backend/evidence_vault/.gitkeep
 # Large public video assets
 uhi_frontend/public/*.mov
 # Live telemetry (runtime data)
