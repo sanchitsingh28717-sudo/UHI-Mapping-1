@@ -38,6 +38,9 @@ MIDDLEWARE = [
 # Allow this app to be embedded in iframes (e.g. Next.js dashboard)
 X_FRAME_OPTIONS = 'ALLOWALL'
 
+# Send no Referer header so tile providers don't block requests from iframe context
+SECURE_REFERRER_POLICY = 'no-referrer'
+
 # Allow all origins or direct ports to make direct HTML files work flawlessly
 CORS_ALLOW_ALL_ORIGINS = True
 
