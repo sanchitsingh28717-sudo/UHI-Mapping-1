@@ -228,37 +228,15 @@ class OmniSentinelAgent:
             dem, lst, ndvi, ndvi_focal, ndbi, ndbi_focal, ndwi, lulc = 55.0, 42.5, 0.18, 0.18, 0.28, 0.28, -0.15, 50.0
             logs.append("[VISION-INFO] Using calibrated local microclimate baseline.")
 
-        # 2. OSMNX DATA PULL (True Z-Axis morphology)
-        real_height = 15.0
-        if ox is not None:
-            try:
-                logs.append("[VISION] Querying OpenStreetMap API for structural canyon morphology...")
-                import concurrent.futures
-                tags = {'building': True}
-                def _osm_fetch():
-                    return ox.features.features_from_point((target_coords[0], target_coords[1]), tags, dist=400)
-                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                    future = ex.submit(_osm_fetch)
-                    try:
-                        buildings = future.result(timeout=5)
-                        if 'building:levels' in buildings.columns:
-                            buildings['estimated_height'] = pd.to_numeric(buildings['building:levels'], errors='coerce') * 3.5
-                            val = buildings['estimated_height'].mean(skipna=True)
-                            if not np.isnan(val) and val > 0:
-                                real_height = float(val)
-                        logs.append(f"[VISION] OSM structural morphology extracted. Ground Truth Z-Axis: {real_height:.1f}m")
-                    except concurrent.futures.TimeoutError:
-                        real_height = 18.0
-                        logs.append("[VISION-INFO] OSM query timed out. Using regional geometric baseline.")
-            except Exception:
-                real_height = 18.0
-                logs.append("[VISION-INFO] OSM extraction defaulted to regional geometric baseline.")
+        # OSM skipped for speed — use regional geometric baseline directly
+        real_height = 18.0
+        logs.append("[VISION] OSM structural morphology: using regional geometric baseline.")
 
         # 3. LIVE WEATHER INTAKE
         weather = {"ambient_temp": 38.0, "synoptic_wind": 14.0}
         try:
             url = f"https://api.open-meteo.com/v1/forecast?latitude={target_coords[0]}&longitude={target_coords[1]}&current=temperature_2m,wind_speed_10m"
-            res = requests.get(url, timeout=3).json()
+            res = requests.get(url, timeout=1).json()
             if 'current' in res:
                 weather["ambient_temp"] = float(res['current'].get('temperature_2m', 38.0))
                 weather["synoptic_wind"] = float(res['current'].get('wind_speed_10m', 14.0))
