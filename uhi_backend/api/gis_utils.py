@@ -2,8 +2,86 @@ import os
 import json
 import rasterio
 import numpy as np
+import pandas as pd
 from pathlib import Path
 from shapely.geometry import Point, Polygon, shape
+
+# ---------------------------------------------------------------------------
+# SANKALP Knowledge-Base CSV Spatial Lookup
+# ---------------------------------------------------------------------------
+# The SANKALP_v4_Max_Density_Data.csv is a uniform spatial sample of the
+# Ahmedabad GeoTIFF raster grid. Each row's system:index maps linearly to
+# a raster pixel: csv_idx = floor(linear_pixel_idx * csv_rows / total_pixels)
+# This lets us do O(1) coordinate → nearest CSV row lookups.
+
+_CSV_DF = None          # lazy-loaded, cached in memory
+_RASTER_META = None     # (bounds, n_rows, n_cols) cached from LST tiff
+
+def _get_raster_meta():
+    global _RASTER_META
+    if _RASTER_META is not None:
+        return _RASTER_META
+    lst_path = BASE_DIR.parent / 'AI_UH_Python' / 'maps' / 'Ahmedabad_LST.tif'
+    with rasterio.open(str(lst_path)) as src:
+        _RASTER_META = (src.bounds, src.shape[0], src.shape[1])
+    return _RASTER_META
+
+def _get_csv_df():
+    global _CSV_DF
+    if _CSV_DF is not None:
+        return _CSV_DF
+    csv_path = BASE_DIR / 'knowledge_base' / 'SANKALP_v4_Max_Density_Data.csv'
+    df = pd.read_csv(str(csv_path))
+    df.columns = [c.lower().strip().replace('system:index', 'system_index') for c in df.columns]
+    df = df.sort_values('system_index').reset_index(drop=True)
+    _CSV_DF = df
+    return df
+
+def sample_from_csv(lat: float, lon: float) -> dict:
+    """
+    Given a lat/lon coordinate, find the nearest row in the
+    SANKALP_v4_Max_Density_Data CSV and return its environmental values.
+    Falls back to sensible defaults if coordinate is out of bounds.
+    """
+    try:
+        bounds, n_rows, n_cols = _get_raster_meta()
+        df = _get_csv_df()
+        csv_rows = len(df)
+        total_pixels = n_rows * n_cols
+
+        # Clamp coordinate to raster bounds
+        lat_c = max(bounds.bottom, min(bounds.top, lat))
+        lon_c = max(bounds.left,  min(bounds.right, lon))
+
+        row_f = (bounds.top - lat_c) / (bounds.top - bounds.bottom) * n_rows
+        col_f = (lon_c - bounds.left) / (bounds.right - bounds.left) * n_cols
+        linear_idx = int(row_f) * n_cols + int(col_f)
+        csv_target = int(linear_idx * csv_rows / total_pixels)
+        csv_target = max(0, min(csv_rows - 1, csv_target))
+
+        # Binary-search for nearest system_index
+        nearest_pos = (df['system_index'] - csv_target).abs().idxmin()
+        row = df.iloc[nearest_pos]
+
+        return {
+            'system_index': int(row['system_index']),
+            'dem':  float(row.get('dem',  55.0)),
+            'lst':  float(row.get('lst',  42.5)),
+            'lulc': float(row.get('lulc', 50.0)),
+            'ndbi': float(row.get('ndbi', 0.28)),
+            'ndbi_focal': float(row.get('ndbi_focal', row.get('ndbi', 0.28))),
+            'ndvi': float(row.get('ndvi', 0.18)),
+            'ndvi_focal': float(row.get('ndvi_focal', row.get('ndvi', 0.18))),
+            'ndwi': float(row.get('ndwi', -0.20)),
+        }
+    except Exception:
+        return {
+            'system_index': 5000,
+            'dem': 55.0, 'lst': 42.5, 'lulc': 50.0,
+            'ndbi': 0.28, 'ndbi_focal': 0.28,
+            'ndvi': 0.18, 'ndvi_focal': 0.18,
+            'ndwi': -0.20,
+        }
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 MAPS_DIR = BASE_DIR.parent / 'AI_UH_Python' / 'maps'

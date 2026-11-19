@@ -1,22 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Cpu, ExternalLink, RefreshCw, Layers, ShieldAlert, Activity } from 'lucide-react';
+import { Cpu, ExternalLink, RefreshCw, Map, Terminal } from 'lucide-react';
 
-export default function SankalpProductionCommandPage() {
-  const [activeTab, setActiveTab] = useState<'mission' | 'quantum' | 'tactical'>('mission');
+export default function SankalpProductionPage() {
+  const [activeTab, setActiveTab] = useState<'map' | 'inference'>('map');
   const [iframeKey, setIframeKey] = useState(0);
 
   const getUrl = () => {
     switch (activeTab) {
-      case 'mission':
-        return 'http://127.0.0.1:8000/';
-      case 'quantum':
-        return 'http://127.0.0.1:8000/inference/';
-      case 'tactical':
-        return 'http://127.0.0.1:8000/map/';
+      case 'map':
+        return 'http://127.0.0.1:8080/';
+      case 'inference':
+        return 'http://127.0.0.1:8080/inference/';
       default:
-        return 'http://127.0.0.1:8000/';
+        return 'http://127.0.0.1:8080/';
     }
   };
 
@@ -31,14 +29,14 @@ export default function SankalpProductionCommandPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-sm font-extrabold tracking-wider uppercase text-cyan-300">
-                SANKALP Mission Control & Quantum Command
+                sankalp_production
               </h1>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                 LIVE PRODUCTION UI/UX
               </span>
             </div>
             <p className="text-[10px] text-slate-400 font-mono">
-              Direct Tri-Domain LangGraph Engine // Architect: Dhaval Agrawal (BISAG-N)
+              Tri-Domain LangGraph Engine // Architect: Dhaval Agrawal (BISAG-N)
             </p>
           </div>
         </div>
@@ -47,34 +45,26 @@ export default function SankalpProductionCommandPage() {
         <div className="flex items-center gap-2">
           <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
             <button
-              onClick={() => setActiveTab('mission')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'mission'
+              onClick={() => setActiveTab('map')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'map'
                   ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
                   : 'text-slate-300 hover:text-white'
               }`}
             >
-              Mission Control (Radar)
+              <Map size={12} />
+              GIS Heatmap
             </button>
             <button
-              onClick={() => setActiveTab('quantum')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'quantum'
+              onClick={() => setActiveTab('inference')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'inference'
                   ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
                   : 'text-slate-300 hover:text-white'
               }`}
             >
-              Quantum 3D Command
-            </button>
-            <button
-              onClick={() => setActiveTab('tactical')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === 'tactical'
-                  ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
-                  : 'text-slate-300 hover:text-white'
-              }`}
-            >
-              Tactical GIS Heatmap
+              <Terminal size={12} />
+              Inference Dashboard
             </button>
           </div>
 
@@ -105,7 +95,7 @@ export default function SankalpProductionCommandPage() {
           key={`${activeTab}-${iframeKey}`}
           src={getUrl()}
           className="w-full h-full border-0 absolute inset-0"
-          title="SANKALP Production Interface"
+          title="sankalp_production Interface"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         />
       </div>

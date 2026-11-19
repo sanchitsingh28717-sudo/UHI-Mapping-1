@@ -247,6 +247,8 @@ export const useStore = create<AppState>((set, get) => ({
     const token = get().token;
     if (!token) return;
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120000); // 120s timeout
       const res = await fetch(`${BACKEND_URL}/api/recommend/`, {
         method: 'POST',
         headers: {
@@ -254,7 +256,9 @@ export const useStore = create<AppState>((set, get) => ({
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ latitude: lat, longitude: lng }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       if (res.ok) {
         const data = await res.json();
         set({

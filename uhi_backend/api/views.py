@@ -195,11 +195,16 @@ class MitigationRecommendationsView(APIView):
             env_data = sample_environmental_data(lon, lat)
             analysis = predict_heat_zone(env_data)
             
-            # Execute SANKALP 7-Node LangGraph Omni-Sentinel Agent
+            import concurrent.futures
+
+            # Execute SANKALP 7-Node LangGraph Omni-Sentinel Agent in a thread
+            # so the OSM/weather calls don't block the main Django worker indefinitely
             agent = get_sentinel_agent()
-            agent_result = agent.execute(temp_offset=0.0, wind_offset=0.0, lat=lat, lng=lon)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(agent.execute, 0.0, 0.0, lat, lon)
+                agent_result = future.result(timeout=90)
             
-            # Also get detailed urban guidelines
+            # Also get detailed urban guidelines (Gemini has its own 5s timeout internally)
             gemini_recs = generate_mitigation_recommendations(lat, lon, env_data, analysis)
             
             # Combine SANKALP Autonomous Policy Draft with Gemini recommendations
@@ -232,6 +237,8 @@ class MitigationRecommendationsView(APIView):
                 }
             })
             
+        except concurrent.futures.TimeoutError:
+            return Response({"error": "Agent execution timed out. Please retry."}, status=status.HTTP_504_GATEWAY_TIMEOUT)
         except ValueError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

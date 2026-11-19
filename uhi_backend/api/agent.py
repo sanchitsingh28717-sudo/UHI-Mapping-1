@@ -207,20 +207,25 @@ class OmniSentinelAgent:
         logs = state["status_logs"]
         target_coords = [state["payload"].get("lat", 23.0225), state["payload"].get("lng", 72.5714)]
         
-        # 1. First attempt to sample high-resolution local GeoTIFF environmental rasters
+        # 1. Sample environmental data from SANKALP_v4_Max_Density_Data CSV
+        #    (same knowledge-base used by sankalp_production)
         logs.append(f"[VISION] Ingesting multi-band spatial telemetry for ({target_coords[0]:.4f}, {target_coords[1]:.4f})...")
         try:
-            from .gis_utils import sample_environmental_data
-            sampled = sample_environmental_data(target_coords[1], target_coords[0])
-            dem = float(sampled.get('dem', 55.0))
-            lst = float(sampled.get('lst', 42.5))
-            ndvi = float(sampled.get('ndvi', 0.18))
-            ndbi = float(sampled.get('ndbi', 0.28))
-            ndwi = float(sampled.get('ndwi', -0.15))
-            lulc = float(sampled.get('lulc', 50.0))
-            logs.append(f"[VISION] GeoTIFF extraction completed. LST: {lst:.1f}°C, NDVI: {ndvi:.2f}, NDBI: {ndbi:.2f}")
-        except Exception:
-            dem, lst, ndvi, ndbi, ndwi, lulc = 55.0, 42.5, 0.18, 0.28, -0.15, 50.0
+            from .gis_utils import sample_from_csv
+            sampled = sample_from_csv(target_coords[0], target_coords[1])
+            sys_idx    = sampled['system_index']
+            dem        = sampled['dem']
+            lst        = sampled['lst']
+            ndvi       = sampled['ndvi']
+            ndvi_focal = sampled['ndvi_focal']
+            ndbi       = sampled['ndbi']
+            ndbi_focal = sampled['ndbi_focal']
+            ndwi       = sampled['ndwi']
+            lulc       = sampled['lulc']
+            logs.append(f"[VISION] SANKALP KB row {sys_idx} matched. LST: {lst:.1f}°C, NDVI: {ndvi:.3f}, NDBI: {ndbi:.3f}, DEM: {dem:.0f}m")
+        except Exception as e:
+            sys_idx = 5000
+            dem, lst, ndvi, ndvi_focal, ndbi, ndbi_focal, ndwi, lulc = 55.0, 42.5, 0.18, 0.18, 0.28, 0.28, -0.15, 50.0
             logs.append("[VISION-INFO] Using calibrated local microclimate baseline.")
 
         # 2. OSMNX DATA PULL (True Z-Axis morphology)
@@ -228,14 +233,23 @@ class OmniSentinelAgent:
         if ox is not None:
             try:
                 logs.append("[VISION] Querying OpenStreetMap API for structural canyon morphology...")
+                import concurrent.futures
                 tags = {'building': True}
-                buildings = ox.features.features_from_point((target_coords[0], target_coords[1]), tags, dist=400)
-                if 'building:levels' in buildings.columns:
-                    buildings['estimated_height'] = pd.to_numeric(buildings['building:levels'], errors='coerce') * 3.5
-                    val = buildings['estimated_height'].mean(skipna=True)
-                    if not np.isnan(val) and val > 0:
-                        real_height = float(val)
-                logs.append(f"[VISION] OSM structural morphology extracted. Ground Truth Z-Axis: {real_height:.1f}m")
+                def _osm_fetch():
+                    return ox.features.features_from_point((target_coords[0], target_coords[1]), tags, dist=400)
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                    future = ex.submit(_osm_fetch)
+                    try:
+                        buildings = future.result(timeout=5)
+                        if 'building:levels' in buildings.columns:
+                            buildings['estimated_height'] = pd.to_numeric(buildings['building:levels'], errors='coerce') * 3.5
+                            val = buildings['estimated_height'].mean(skipna=True)
+                            if not np.isnan(val) and val > 0:
+                                real_height = float(val)
+                        logs.append(f"[VISION] OSM structural morphology extracted. Ground Truth Z-Axis: {real_height:.1f}m")
+                    except concurrent.futures.TimeoutError:
+                        real_height = 18.0
+                        logs.append("[VISION-INFO] OSM query timed out. Using regional geometric baseline.")
             except Exception:
                 real_height = 18.0
                 logs.append("[VISION-INFO] OSM extraction defaulted to regional geometric baseline.")
@@ -253,7 +267,9 @@ class OmniSentinelAgent:
             logs.append("[METEO-INFO] Open-Meteo fallback active. Using ambient sensor baseline.")
 
         extracted = {
-            "dem": dem, "lst": lst, "ndbi": ndbi, "ndvi": ndvi, "ndwi": ndwi, "lulc": lulc,
+            "sys_idx": sys_idx,
+            "dem": dem, "lst": lst, "ndbi": ndbi, "ndbi_focal": ndbi_focal,
+            "ndvi": ndvi, "ndvi_focal": ndvi_focal, "ndwi": ndwi, "lulc": lulc,
             "initial_height": real_height, "initial_wind": 1.2 + (dem / 120.0),
             "current_albedo": 0.20, "building_footprint": 450.0,
             "optical_noise_delta": round(random.uniform(0.12, 0.48), 4)
@@ -290,21 +306,25 @@ class OmniSentinelAgent:
         while iterations < max_iterations:
             iterations += 1
             
-            # 1. Structural Wind Simulation (6-D: [base_wind, wind_dir, lp, lf, svf, height])
+            # 1. Structural Wind Simulation — 6-D schema matching sankalp_production:
+            #    [height, dem, base_wind, wind_dir, lambda_p, lambda_f]
             lp = max(0.05, 0.50 - (sim_h / 120.0))
             lf = max(0.08, 0.55 - (sim_h / 110.0))
-            svf = max(0.12, 1.0 - (sim_h / 140.0))
-            wind_vector = [data["initial_wind"], 235.0, lp, lf, svf, sim_h]
+            wind_dir = 230.0 + (sim_h * 0.15)
+            wind_vector = [sim_h, data["dem"], data["initial_wind"], wind_dir, lp, lf]
             pred_wind = self.quad_suite.predict_wind_speed(wind_vector)
             
-            # 2. UHI Hotspot Evaluation (10-D: [LST, DEM, LULC, NDBI, NDVI, NDWI, NDBI_Focal, NDVI_Focal, USI, USI_Focal])
-            sim_ndbi = max(-0.4, data["ndbi"] - (iterations * 0.08))
-            sim_ndvi = min(0.9, data["ndvi"] + (iterations * 0.06))
-            sim_usi = sim_ndbi - sim_ndvi
-            
+            # 2. UHI Hotspot Evaluation — 10-D schema matching sankalp_production:
+            #    [sys_idx, dem, lst, lulc, ndbi, ndbi_focal, ndvi, ndvi_focal, ndwi, height]
+            sim_ndbi       = max(-0.4, data["ndbi"]       - (iterations * 0.08))
+            sim_ndbi_focal = max(-0.4, data["ndbi_focal"] - (iterations * 0.08))
+            sim_ndvi       = min(0.9,  data["ndvi"]       + (iterations * 0.06))
+            sim_ndvi_focal = min(0.9,  data["ndvi_focal"] + (iterations * 0.06))
+
             spatial_10d = [
-                current_lst, data["dem"], data["lulc"],
-                sim_ndbi, sim_ndvi, data["ndwi"], sim_ndbi, sim_ndvi, sim_usi, sim_usi
+                data["sys_idx"], data["dem"], current_lst, data["lulc"],
+                sim_ndbi, sim_ndbi_focal, sim_ndvi, sim_ndvi_focal,
+                data["ndwi"], sim_h
             ]
             is_hotspot, hotspot_prob = self.quad_suite.predict_uhi_status(spatial_10d, threshold=0.40)
             
